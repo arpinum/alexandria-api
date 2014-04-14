@@ -2,5 +2,10 @@ package alexandria.modele.bibliotheque;
 
 import fr.arpinum.graine.modele.EntrepotAvecUuid;
 
-public interface EntrepotBibliotheques extends EntrepotAvecUuid<Bibliotheque>{
+import java.util.Optional;
+
+public interface EntrepotBibliotheques extends EntrepotAvecUuid<Bibliotheque> {
+
+    Optional<Bibliotheque> parEmailLecteur(String email);
+
 }
