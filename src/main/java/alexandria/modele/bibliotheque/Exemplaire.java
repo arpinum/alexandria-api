@@ -3,6 +3,11 @@ package alexandria.modele.bibliotheque;
 import java.util.Objects;
 
 public class Exemplaire {
+
+    protected Exemplaire() {
+        // pour mongolink
+    }
+
     public Exemplaire(String isbn) {
         this.isbn = isbn;
     }
@@ -24,5 +29,5 @@ public class Exemplaire {
         return Objects.hashCode(isbn);
     }
 
-    private final String isbn;
+    private  String isbn;
 }

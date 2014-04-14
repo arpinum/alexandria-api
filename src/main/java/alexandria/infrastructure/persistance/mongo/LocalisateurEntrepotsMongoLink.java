@@ -1,5 +1,6 @@
 package alexandria.infrastructure.persistance.mongo;
 
+import alexandria.modele.bibliotheque.EntrepotBibliotheques;
 import fr.arpinum.graine.infrastructure.persistance.mongo.ContexteMongoLink;
 import alexandria.modele.LocalisateurEntrepots;
 
@@ -15,6 +16,11 @@ public class LocalisateurEntrepotsMongoLink extends LocalisateurEntrepots {
 
     protected ContexteMongoLink contexte() {
         return contexteMongoLink;
+    }
+
+    @Override
+    protected EntrepotBibliotheques getBibliotheques() {
+        return new EntrepotBibliothequesMongolink(contexteMongoLink.sessionCourante());
     }
 
     private final ContexteMongoLink contexteMongoLink;

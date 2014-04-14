@@ -10,9 +10,13 @@ import java.util.UUID;
 
 public class Bibliotheque implements RacineAvecUuid {
 
+    @SuppressWarnings("UnusedDeclaration")
+    protected Bibliotheque() {
+        // pour mongolink
+    }
+
     public Bibliotheque(Lecteur lecteur) {
         emailLecteur = lecteur.getEmail();
-        exemplaires = Lists.newArrayList();
         identifiant = UUID.randomUUID();
     }
 
@@ -40,9 +44,9 @@ public class Bibliotheque implements RacineAvecUuid {
         return exemplaires.contains(exemplaire);
     }
 
-    private final UUID identifiant;
+    private UUID identifiant;
 
     private String emailLecteur;
 
-    private List<Exemplaire> exemplaires;
+    private List<Exemplaire> exemplaires = Lists.newArrayList();
 }
