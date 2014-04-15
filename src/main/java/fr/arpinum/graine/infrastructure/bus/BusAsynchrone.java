@@ -39,13 +39,12 @@ public abstract class BusAsynchrone implements Bus {
     private <TReponse> Callable<ResultatExecution<TReponse>> execute(Message<TReponse> message, HandlerMessage<Message<TReponse>, TReponse> handlerMessage) {
         return () -> {
             try {
-
                 synchronisations.forEach((synchro) -> synchro.avantExecution(message));
                 final TReponse reponse = handlerMessage.execute(message);
                 synchronisations.forEach(SynchronisationBus::apresExecution);
                 return ResultatExecution.succes(reponse);
             } catch (Throwable e) {
-                synchronisations.forEach(SynchronisationBus::apresExecution);
+                synchronisations.forEach(SynchronisationBus::surErreur);
                 LOGGER.error("Erreur sur message " + message.getClass().getSimpleName(),e);
                 return ResultatExecution.erreur(e);
             } finally {
