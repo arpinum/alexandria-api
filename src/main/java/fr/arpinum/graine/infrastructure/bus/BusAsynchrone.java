@@ -46,7 +46,7 @@ public abstract class BusAsynchrone implements Bus {
                 return ResultatExecution.succes(reponse);
             } catch (Throwable e) {
                 synchronisations.forEach(SynchronisationBus::apresExecution);
-                LOGGER.error("Erreur sur message {} : {}", message, e.getMessage());
+                LOGGER.error("Erreur sur message " + message.getClass().getSimpleName(),e);
                 return ResultatExecution.erreur(e);
             } finally {
                 synchronisations.forEach(SynchronisationBus::finalement);
