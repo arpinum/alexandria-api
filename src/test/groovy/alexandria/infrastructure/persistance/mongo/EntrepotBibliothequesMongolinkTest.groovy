@@ -24,4 +24,16 @@ class EntrepotBibliothequesMongolinkTest extends Specification {
         bibliotheque.emailLecteur() == "email"
         bibliotheque.contient(new Exemplaire("isbn"))
     }
+
+    def "peut retrouver par email"() {
+        given:
+        mongolink.collection("bibliotheque") << [[_id:UUID.randomUUID(), emailLecteur: "autreemail"], [_id:UUID.randomUUID(), emailLecteur: "monemail"]]
+
+        when:
+        def optionnelle = new EntrepotBibliothequesMongolink(mongolink.sessionCourante()).parEmailLecteur("monemail")
+
+        then:
+        optionnelle.isPresent()
+        optionnelle.get().emailLecteur() == "monemail"
+    }
 }
