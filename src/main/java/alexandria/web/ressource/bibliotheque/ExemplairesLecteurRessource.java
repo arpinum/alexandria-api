@@ -14,7 +14,7 @@ public class ExemplairesLecteurRessource extends ServerResource {
         this.bus = bus;
     }
 
-    @Put
+    @Put("application/json")
     public void ajoute() {
         final AjoutExemplaireCommande commande = new AjoutExemplaireCommande();
         commande.email = getAttribute("email");
