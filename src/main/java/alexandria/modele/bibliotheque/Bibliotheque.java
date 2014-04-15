@@ -4,6 +4,7 @@ import alexandria.modele.lecteur.Lecteur;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import fr.arpinum.graine.modele.RacineAvecUuid;
+import fr.arpinum.graine.modele.evenement.BusEvenement;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +36,19 @@ public class Bibliotheque implements RacineAvecUuid {
     }
 
     public Exemplaire ajouteExemplaire(String isbn) {
+        final Exemplaire exemplaire = ajouteNouvelExemplaire(isbn);
+        publieEvenement(isbn);
+        return  exemplaire;
+    }
+
+    private Exemplaire ajouteNouvelExemplaire(String isbn) {
         final Exemplaire exemplaire = new Exemplaire(isbn);
         exemplaires.add(exemplaire);
-        return  exemplaire;
+        return exemplaire;
+    }
+
+    private void publieEvenement(String isbn) {
+        BusEvenement.INSTANCE().publie(new ExemplaireAjouteEvenement(isbn, this.getId()));
     }
 
     public boolean contient(Exemplaire exemplaire) {
@@ -49,4 +60,5 @@ public class Bibliotheque implements RacineAvecUuid {
     private String emailLecteur;
 
     private List<Exemplaire> exemplaires = Lists.newArrayList();
+
 }
