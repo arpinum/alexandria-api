@@ -14,8 +14,8 @@ public class RechercheRessource extends ServerResource {
     }
 
     @Get
-    public ListeDetailsLivres recherche() {
-        return ListeDetailsLivres.nouvelle(catalogueLivre.recherche(getQueryValue("q")));
+    public ListeLivre recherche() {
+        return ListeLivre.nouvelle(catalogueLivre.recherche(getQueryValue("q")));
     }
 
     private final CatalogueLivre catalogueLivre;

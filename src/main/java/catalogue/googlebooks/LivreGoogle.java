@@ -14,7 +14,7 @@ public class LivreGoogle {
     }
 
     private String isbn() {
-        return identifiantDeType("ISBN_13").orElseGet(() -> volumeInfo.industryIdentifiers.stream().findFirst().get()).type;
+        return identifiantDeType("ISBN_13").orElseGet(() -> volumeInfo.industryIdentifiers.stream().findFirst().get()).identifier;
     }
 
     private Optional<Identifieur> identifiantDeType(String type) {

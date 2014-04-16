@@ -18,6 +18,7 @@ class RechercheRessourceTest extends Specification {
         def résultat = ressource.recherche()
 
         then:
-        résultat == livres
+        résultat != null
+        résultat.livres == livres
     }
 }

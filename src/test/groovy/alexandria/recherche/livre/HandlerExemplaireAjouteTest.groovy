@@ -28,9 +28,7 @@ class HandlerExemplaireAjouteTest extends Specification {
         resume.nombre == 1
     }
 
-    private capteur() {
-        new HandlerExemplaireAjoute(jongo.jongo(), catalogue)
-    }
+
 
     def "ajoute un exemplaire à un livre existant"(){
         given:
@@ -58,5 +56,10 @@ class HandlerExemplaireAjouteTest extends Specification {
         then:"Nous vérifions que le livre a été ajouté"
         def resume = jongo.collection("vue_resumelivre").findOne()
         resume.titre == "Harry Potter"
+    }
+
+    private capteur() {
+        catalogue.parIsbn(_) >> Optional.of(new DetailsLivre())
+        new HandlerExemplaireAjoute(jongo.jongo(), catalogue)
     }
 }
