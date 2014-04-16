@@ -1,17 +1,21 @@
 package alexandria.recherche.livre;
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
+import catalogue.CatalogueLivre;
+import catalogue.DetailsLivre;
 import fr.arpinum.graine.modele.evenement.HandlerEvenement;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class HandlerExemplaireAjoute implements HandlerEvenement<ExemplaireAjouteEvenement> {
 
     @Inject
-    public HandlerExemplaireAjoute(Jongo jongo) {
+    public HandlerExemplaireAjoute(Jongo jongo, CatalogueLivre catalogue) {
         this.jongo = jongo;
+        this.catalogue = catalogue;
     }
 
     @Override
@@ -30,8 +34,12 @@ public class HandlerExemplaireAjoute implements HandlerEvenement<ExemplaireAjout
     }
 
     private void enregistreUnNouvelExemplaire(ExemplaireAjouteEvenement evenement, MongoCollection collection) {
-        collection.save(new ResumeLivre(evenement.isbn, ""));
+        final Optional<DetailsLivre> details = catalogue.parIsbn(evenement.isbn);
+
+        collection.save(new ResumeLivre(evenement.isbn, details.orElse(LIVRE_VIDE).titre));
     }
 
     private final Jongo jongo;
+    private final CatalogueLivre catalogue;
+    private static final DetailsLivre LIVRE_VIDE = new DetailsLivre();
 }

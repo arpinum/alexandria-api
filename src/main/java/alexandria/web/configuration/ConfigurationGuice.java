@@ -1,5 +1,7 @@
 package alexandria.web.configuration;
 
+import catalogue.CatalogueLivre;
+import catalogue.googlebooks.CatalogueLivreGoogle;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
 import com.google.inject.AbstractModule;
@@ -41,10 +43,16 @@ public class ConfigurationGuice extends AbstractModule {
     @Override
     protected void configure() {
         Names.bindProperties(binder(), propriétés());
+        configureCatalogue();
         configurePersistance();
         configureCommandes();
         configureRecherches();
         configureEvements();
+
+    }
+
+    private void configureCatalogue() {
+        bind(CatalogueLivre.class).to(CatalogueLivreGoogle.class).in(Singleton.class);
     }
 
     private Properties propriétés() {
