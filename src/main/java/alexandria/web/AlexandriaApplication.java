@@ -1,6 +1,7 @@
 package alexandria.web;
 
 import alexandria.web.ressource.bibliotheque.ExemplairesLecteurRessource;
+import alexandria.web.ressource.catalogue.RechercheRessource;
 import alexandria.web.ressource.livre.LivresRessource;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -41,6 +42,7 @@ public class AlexandriaApplication extends BaseApplication {
             @Override
             protected void route() {
                 attach("/livres", LivresRessource.class);
+                attach("/recherche", RechercheRessource.class);
                 attach("/lecteurs/{email}/exemplaires/{isbn}", ExemplairesLecteurRessource.class);
                 attachDefault(IndexRessource.class);
             }
