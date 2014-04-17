@@ -90,7 +90,7 @@ public class ConfigurationGuice extends AbstractModule {
     private void configureEvements() {
         final Multibinder<SynchronisationEvenement> multibinder = Multibinder.newSetBinder(binder(), SynchronisationEvenement.class);
         multibinder.addBinding().to(ContexteMongoLink.class);
-        BusMagique.scanPackageEtBind("votreapplication", HandlerEvenement.class, binder());
+        BusMagique.scanPackageEtBind("alexandria", HandlerEvenement.class, binder());
         bind(BusEvenement.class).to(BusEvenementAsynchrone.class).asEagerSingleton();
     }
 
@@ -120,7 +120,7 @@ public class ConfigurationGuice extends AbstractModule {
         final MongoClient mongoClient = new MongoClient(configurationMongoDb.host, configurationMongoDb.port);
         final DB db = mongoClient.getDB(configurationMongoDb.name);
         if (configurationMongoDb.avecAuthentificationDB()) {
-            db.authenticate(configurationMongoDb.user, configurationMongoDb.password.toCharArray());
+            assert db.authenticate(configurationMongoDb.user, configurationMongoDb.password.toCharArray());
         }
         return new Jongo(db);
     }
