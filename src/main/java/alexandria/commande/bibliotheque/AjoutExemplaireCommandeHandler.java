@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class AjoutLivreCommandeHandler implements HandlerCommande<AjoutExemplaireCommande, UUID> {
+public class AjoutExemplaireCommandeHandler implements HandlerCommande<AjoutExemplaireCommande, UUID> {
 
     @Override
     public UUID execute(AjoutExemplaireCommande commande) {

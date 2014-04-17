@@ -31,6 +31,7 @@ class BibliothequeTest extends Specification {
         then:
         exemplaire != null
         exemplaire.isbn() == "mon isbn"
+        exemplaire.identifiantBibliotheque() == uneBibliotheque.getId()
         uneBibliotheque.contient(exemplaire)
     }
 

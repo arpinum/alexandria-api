@@ -12,5 +12,6 @@ public class ExemplaireMapping extends ComponentMap<Exemplaire> {
     @Override
     public void map() {
         property().onField("isbn");
+        property().onField("identifiantBibliotheque");
     }
 }

@@ -42,7 +42,7 @@ public class Bibliotheque implements RacineAvecUuid {
     }
 
     private Exemplaire ajouteNouvelExemplaire(String isbn) {
-        final Exemplaire exemplaire = new Exemplaire(isbn);
+        final Exemplaire exemplaire = new Exemplaire(isbn, this.getId());
         exemplaires.add(exemplaire);
         return exemplaire;
     }

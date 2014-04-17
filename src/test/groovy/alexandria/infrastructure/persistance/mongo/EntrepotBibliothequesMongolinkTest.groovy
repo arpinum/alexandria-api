@@ -13,7 +13,7 @@ class EntrepotBibliothequesMongolinkTest extends Specification {
     def "peut récupérer une bibliotheque"() {
         given:
         def identifiant = UUID.randomUUID()
-        mongolink.collection("bibliotheque") << [_id: identifiant, emailLecteur : "email", exemplaires: [[isbn:"isbn"]]]
+        mongolink.collection("bibliotheque") << [_id: identifiant, emailLecteur : "email", exemplaires: [[isbn:"isbn", identifiantBibliotheque:identifiant]]]
 
         when:
         def bibliotheque = new EntrepotBibliothequesMongolink(mongolink.sessionCourante()).get(identifiant)
@@ -22,7 +22,7 @@ class EntrepotBibliothequesMongolinkTest extends Specification {
         bibliotheque != null
         bibliotheque.getId() == identifiant
         bibliotheque.emailLecteur() == "email"
-        bibliotheque.contient(new Exemplaire("isbn"))
+        bibliotheque.contient(new Exemplaire("isbn", identifiant))
     }
 
     def "peut retrouver par email"() {
