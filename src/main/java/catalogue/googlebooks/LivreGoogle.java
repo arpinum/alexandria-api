@@ -3,6 +3,7 @@ package catalogue.googlebooks;
 import catalogue.DetailsLivre;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class LivreGoogle {
 
@@ -18,7 +19,12 @@ public class LivreGoogle {
         if(volumeInfo.industryIdentifiers == null) {
             return "";
         }
-        return identifiantDeType("ISBN_13").orElseGet(() -> volumeInfo.industryIdentifiers.stream().findFirst().orElse(new Identifieur())).identifier;
+        return identifiantDeType("ISBN_13")
+                .orElseGet(premier()).identifier;
+    }
+
+    private Supplier<Identifieur> premier() {
+        return () -> volumeInfo.industryIdentifiers.stream().findFirst().orElse(new Identifieur());
     }
 
     private Optional<Identifieur> identifiantDeType(String type) {
