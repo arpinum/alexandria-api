@@ -6,6 +6,8 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -25,16 +27,20 @@ public class CatalogueLivreGoogle implements CatalogueLivre {
         try {
             return faisRecherche(recherche);
         } catch (java.io.IOException e) {
+            LOGGER.error("Impossible de faire la recherche sur google", e);
             return Lists.newArrayList();
         }
     }
 
     private List<DetailsLivre> faisRecherche(String recherche) throws IOException {
+        LOGGER.debug("Recherche d'un livre : {}", recherche);
         final URL url = new URL(String.format("https://www.googleapis.com/books/v1/volumes?q=%s", recherche));
         try (Reader reader = Resources.asCharSource(url, Charsets.UTF_8).openStream()) {
             final CollectionGoogle collectionGoogle = new Gson().fromJson(reader, CollectionGoogle.class);
+
             return collectionGoogle.enDetailsLivres();
         }
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogueLivreGoogle.class);
 }
