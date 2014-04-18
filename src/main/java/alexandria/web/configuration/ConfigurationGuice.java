@@ -1,5 +1,7 @@
 package alexandria.web.configuration;
 
+import alexandria.infrastructure.persistance.mongo.LocalisateurEntrepotsMongoLink;
+import alexandria.modele.LocalisateurEntrepots;
 import catalogue.CatalogueLivre;
 import catalogue.googlebooks.CatalogueLivreGoogle;
 import com.google.common.io.ByteSource;
@@ -28,8 +30,6 @@ import org.mongolink.MongoSessionManager;
 import org.mongolink.Settings;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.mapper.ContextBuilder;
-import alexandria.infrastructure.persistance.mongo.LocalisateurEntrepotsMongoLink;
-import alexandria.modele.LocalisateurEntrepots;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -38,6 +38,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.Properties;
+
+import static com.google.common.base.Preconditions.checkState;
 
 public class ConfigurationGuice extends AbstractModule {
     @Override
@@ -116,11 +118,11 @@ public class ConfigurationGuice extends AbstractModule {
 
     @Provides
     @Singleton
-    public Jongo jongo(ConfigurationMongoDb configurationMongoDb) throws UnknownHostException {
+    public Jongo jongo(ConfigurationMongoDb configurationMongoDb, MongoSessionManager manager) throws UnknownHostException {
         final MongoClient mongoClient = new MongoClient(configurationMongoDb.host, configurationMongoDb.port);
         final DB db = mongoClient.getDB(configurationMongoDb.name);
         if (configurationMongoDb.avecAuthentificationDB()) {
-            assert db.authenticate(configurationMongoDb.user, configurationMongoDb.password.toCharArray());
+            checkState(db.authenticate(configurationMongoDb.user, configurationMongoDb.password.toCharArray()));
         }
         return new Jongo(db);
     }

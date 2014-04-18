@@ -1,5 +1,6 @@
 package alexandria.recherche.livre;
 
+import com.google.common.collect.Lists;
 import fr.arpinum.graine.recherche.HandlerRechercheJongo;
 import org.jongo.Jongo;
 
@@ -8,6 +9,6 @@ public class HandlerRechercheTousLesLivres extends HandlerRechercheJongo<TousLes
 
     @Override
     protected Iterable<ResumeLivre> execute(TousLesLivres tousLesLivres, Jongo jongo) {
-        return jongo.getCollection("vue_resumelivre").find().as(ResumeLivre.class);
+        return Lists.newArrayList(jongo.getCollection("vue_resumelivre").find().as(ResumeLivre.class));
     }
 }
