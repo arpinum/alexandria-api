@@ -10,6 +10,7 @@ public class LivreGoogle {
         final DetailsLivre résultat = new DetailsLivre();
         résultat.titre = volumeInfo.title;
         résultat.isbn = isbn();
+        résultat.image = Optional.ofNullable(volumeInfo.imageLinks).orElse(new ImagesGoogle()).thumbnail;
         return résultat;
     }
 

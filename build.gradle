@@ -5,13 +5,14 @@ repositories {
     mavenCentral()
     maven { url 'http://maven.restlet.org' }
     maven { url 'http://repository-mongolink.forge.cloudbees.com/release' }
+    maven { url 'http://repository-mongolink.forge.cloudbees.com/snapshot' }
 }
 
 compileJava.options.encoding = 'UTF-8'
 
 project.ext.with {
     set "restletVersion", "2.2.0"
-    set "mongoLinkVersion", "1.0.1"
+    set "mongoLinkVersion", "1.0.2-SNAPSHOT"
     set "guiceVersion", "4.0-beta4"
 }
 test {

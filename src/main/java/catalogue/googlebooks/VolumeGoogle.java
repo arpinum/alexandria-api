@@ -6,5 +6,6 @@ public class VolumeGoogle {
 
     public String title;
     public List<Identifieur> industryIdentifiers;
+    public ImagesGoogle imageLinks;
 
 }
