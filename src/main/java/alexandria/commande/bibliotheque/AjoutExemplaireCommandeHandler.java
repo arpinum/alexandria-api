@@ -13,10 +13,14 @@ public class AjoutExemplaireCommandeHandler implements HandlerCommande<AjoutExem
 
     @Override
     public UUID execute(AjoutExemplaireCommande commande) {
-        final Optional<Bibliotheque> eventuellemnent = LocalisateurEntrepots.bibliotheques().parEmailLecteur(commande.email);
-        final Bibliotheque bibliotheque = eventuellemnent.orElseGet(créeBibliothèque(commande));
+        final Bibliotheque bibliotheque = bibliothequeDe(commande);
         bibliotheque.ajouteExemplaire(commande.isbn);
         return bibliotheque.getId();
+    }
+
+    private Bibliotheque bibliothequeDe(AjoutExemplaireCommande commande) {
+        final Optional<Bibliotheque> eventuellemnent = LocalisateurEntrepots.bibliotheques().parEmailLecteur(commande.email);
+        return eventuellemnent.orElseGet(créeBibliothèque(commande));
     }
 
     private Supplier<Bibliotheque> créeBibliothèque(AjoutExemplaireCommande commande) {

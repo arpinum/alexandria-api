@@ -37,7 +37,6 @@ public class CatalogueLivreGoogle implements CatalogueLivre {
         final URL url = new URL(String.format("https://www.googleapis.com/books/v1/volumes?q=%s", recherche));
         try (Reader reader = Resources.asCharSource(url, Charsets.UTF_8).openStream()) {
             final CollectionGoogle collectionGoogle = new Gson().fromJson(reader, CollectionGoogle.class);
-
             return collectionGoogle.enDetailsLivres();
         }
     }

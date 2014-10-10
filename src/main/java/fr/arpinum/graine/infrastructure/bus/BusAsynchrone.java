@@ -1,16 +1,13 @@
 package fr.arpinum.graine.infrastructure.bus;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
 
 public abstract class BusAsynchrone implements Bus {
 
@@ -57,7 +54,7 @@ public abstract class BusAsynchrone implements Bus {
         this.executorService = MoreExecutors.listeningDecorator(executor);
     }
 
-    private final Set<SynchronisationBus> synchronisations = Sets.newHashSet();
+    private final List<SynchronisationBus> synchronisations = Lists.newArrayList();
     private final Map<Class<?>, HandlerMessage> handlers = Maps.newConcurrentMap();
     private ListeningExecutorService executorService = MoreExecutors.listeningDecorator(
             Executors.newCachedThreadPool(
