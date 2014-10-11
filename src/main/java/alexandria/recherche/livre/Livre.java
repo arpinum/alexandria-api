@@ -8,6 +8,10 @@ import java.util.List;
 
 public class Livre {
 
+    @SuppressWarnings("UnusedDeclaration")
+    public Livre() {
+    }
+
     public Livre(String isbn, DetailsLivre detailsLivre) {
         this.isbn = isbn;
         this.titre = detailsLivre.titre;

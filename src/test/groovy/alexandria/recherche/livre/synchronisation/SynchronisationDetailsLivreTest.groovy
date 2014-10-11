@@ -11,7 +11,7 @@ import fr.arpinum.graine.recherche.AvecJongo
 import org.junit.Rule
 import spock.lang.Specification
 
-class SynchronisationLivreTest extends Specification {
+class SynchronisationDetailsLivreTest extends Specification {
 
     @Rule
     AvecJongo jongo = new AvecJongo()

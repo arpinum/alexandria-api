@@ -1,19 +1,18 @@
 package alexandria.web;
 
+import alexandria.modele.LocalisateurEntrepots;
+import alexandria.web.configuration.ConfigurationGuice;
+import alexandria.web.ressource.IndexRessource;
 import alexandria.web.ressource.bibliotheque.ExemplairesLecteurRessource;
 import alexandria.web.ressource.catalogue.RechercheRessource;
+import alexandria.web.ressource.livre.LivreRessource;
 import alexandria.web.ressource.livre.LivresRessource;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
+import com.google.inject.*;
 import fr.arpinum.graine.modele.evenement.BusEvenement;
 import fr.arpinum.graine.modele.evenement.LocalisateurBusEvenement;
 import fr.arpinum.graine.web.restlet.BaseApplication;
 import fr.arpinum.graine.web.restlet.router.GuiceRouter;
 import org.restlet.Context;
-import alexandria.modele.LocalisateurEntrepots;
-import alexandria.web.configuration.ConfigurationGuice;
-import alexandria.web.ressource.IndexRessource;
 
 import java.util.Optional;
 
@@ -42,6 +41,7 @@ public class AlexandriaApplication extends BaseApplication {
             @Override
             protected void route() {
                 attach("/livres", LivresRessource.class);
+                attach("/livres/{isbn}", LivreRessource.class);
                 attach("/recherche", RechercheRessource.class);
                 attach("/lecteurs/{email}/exemplaires/{isbn}", ExemplairesLecteurRessource.class);
                 attachDefault(IndexRessource.class);
