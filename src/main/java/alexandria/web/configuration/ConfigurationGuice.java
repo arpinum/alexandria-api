@@ -26,8 +26,7 @@ import javax.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -37,10 +36,9 @@ public class ConfigurationGuice extends AbstractModule {
         Names.bindProperties(binder(), propriétés());
         configureCatalogue();
         configurePersistance();
+        configureEvements();
         configureCommandes();
         configureRecherches();
-        configureEvements();
-
     }
 
     private void configureCatalogue() {
@@ -73,8 +71,9 @@ public class ConfigurationGuice extends AbstractModule {
 
     private void configureCommandes() {
         final Multibinder<SynchronisationCommande> multibinder = Multibinder.newSetBinder(binder(), SynchronisationCommande.class);
-        multibinder.addBinding().to(ValidateurCommande.class);
         multibinder.addBinding().to(ContexteMongoLink.class);
+        multibinder.addBinding().to(ValidateurCommande.class);
+        multibinder.addBinding().to(BusEvenementAsynchrone.class);
         BusMagique.scanPackageEtBind("alexandria.commande", CapteurCommande.class, binder());
         bind(BusCommande.class).asEagerSingleton();
     }
@@ -90,6 +89,13 @@ public class ConfigurationGuice extends AbstractModule {
     public Validator validator() {
         return Validation.buildDefaultValidatorFactory().getValidator();
     }
+
+    @Provides
+    @Singleton
+    BusEvenementAsynchrone busEvenementAsynchrone(Set<SynchronisationEvenement> synchronisationEvenements, Set<CapteurEvenement> evenements) {
+        return new BusEvenementAsynchrone(synchronisationEvenements, evenements);
+    }
+
 
     @Provides
     @Singleton

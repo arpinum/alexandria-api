@@ -37,6 +37,12 @@ public class ContexteMongoLink implements SynchronisationCommande, Synchronisati
         sessions.get().clear();
     }
 
+    @Override
+    public void apresExecution() {
+        LOGGER.debug("Synchronisation avec MongoDB");
+        sessions.get().flush();
+    }
+
     public MongoSession sessionCourante() {
         return sessions.get();
     }
