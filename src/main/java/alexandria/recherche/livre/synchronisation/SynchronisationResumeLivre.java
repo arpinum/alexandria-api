@@ -1,6 +1,7 @@
-package alexandria.recherche.livre;
+package alexandria.recherche.livre.synchronisation;
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
+import alexandria.recherche.livre.ResumeLivre;
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
 import fr.arpinum.graine.modele.evenement.CapteurEvenement;
@@ -10,10 +11,10 @@ import org.jongo.MongoCollection;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class CapteurExemplaireAjoute implements CapteurEvenement<ExemplaireAjouteEvenement> {
+public class SynchronisationResumeLivre implements CapteurEvenement<ExemplaireAjouteEvenement> {
 
     @Inject
-    public CapteurExemplaireAjoute(Jongo jongo, CatalogueLivre catalogue) {
+    public SynchronisationResumeLivre(Jongo jongo, CatalogueLivre catalogue) {
         this.jongo = jongo;
         this.catalogue = catalogue;
     }

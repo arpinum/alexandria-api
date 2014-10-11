@@ -1,6 +1,7 @@
 package alexandria.recherche.livre
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
+import alexandria.recherche.livre.synchronisation.SynchronisationResumeLivre
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
 import fr.arpinum.graine.recherche.AvecJongo
@@ -60,6 +61,6 @@ class HandlerExemplaireAjouteTest extends Specification {
 
     private capteur() {
         catalogue.parIsbn(_) >> Optional.of(new DetailsLivre())
-        new CapteurExemplaireAjoute(jongo.jongo(), catalogue)
+        new SynchronisationResumeLivre(jongo.jongo(), catalogue)
     }
 }
