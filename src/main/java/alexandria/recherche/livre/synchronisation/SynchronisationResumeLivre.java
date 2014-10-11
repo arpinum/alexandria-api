@@ -37,10 +37,9 @@ public class SynchronisationResumeLivre implements CapteurEvenement<ExemplaireAj
     private void enregistreUnNouvelExemplaire(ExemplaireAjouteEvenement evenement, MongoCollection collection) {
         final Optional<DetailsLivre> details = catalogue.parIsbn(evenement.isbn);
 
-        collection.save(new ResumeLivre(evenement.isbn, details.orElse(LIVRE_VIDE).titre));
+        collection.save(new ResumeLivre(evenement.isbn, details.orElse(DetailsLivre.LIVRE_VIDE).titre));
     }
 
     private final Jongo jongo;
     private final CatalogueLivre catalogue;
-    private static final DetailsLivre LIVRE_VIDE = new DetailsLivre();
 }
