@@ -16,7 +16,7 @@ class LivresRessourceTest extends Specification {
     def "retourne bien tous les livres"() {
         given:
         def livres = [new ResumeLivre()]
-        bus.posteToutDeSuite(_) >> ResultatExecution.succes(livres)
+        bus.envoieEtAttendReponse(_) >> ResultatExecution.succes(livres)
 
         when:
         def reponse = ressource.recherche()

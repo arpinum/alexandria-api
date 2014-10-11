@@ -19,7 +19,7 @@ class AjoutExemplaireCommandeHandlerTest extends Specification {
         def commande = new AjoutExemplaireCommande(email: "body@email.com", isbn: "myisbn")
 
         when:
-        def id = new AjoutExemplaireCommandeHandler().execute(commande)
+        def id = new AjoutExemplaireCommandeCapteur().execute(commande)
 
         then:
         LocalisateurEntrepots.bibliotheques().get(id) != null
@@ -30,7 +30,7 @@ class AjoutExemplaireCommandeHandlerTest extends Specification {
         def commande = new AjoutExemplaireCommande(email: "body@email.com", isbn: "myisbn")
 
         when:
-        def id = new AjoutExemplaireCommandeHandler().execute(commande)
+        def id = new AjoutExemplaireCommandeCapteur().execute(commande)
 
         then:
         def bibliotheque = LocalisateurEntrepots.bibliotheques().get(id)

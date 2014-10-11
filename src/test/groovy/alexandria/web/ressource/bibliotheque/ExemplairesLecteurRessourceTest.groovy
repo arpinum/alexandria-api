@@ -21,7 +21,7 @@ class ExemplairesLecteurRessourceTest extends Specification {
         ressource.ajoute()
 
         then:
-        1 * bus.poste({
+        1 * bus.envoieEtAttendReponse({
             it.email == "monmail" && it.isbn == "iiiiisbn"
         })
     }

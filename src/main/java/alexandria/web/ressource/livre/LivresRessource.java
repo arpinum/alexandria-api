@@ -17,7 +17,7 @@ public class LivresRessource extends ServerResource {
 
     @Get
     public Iterable<ResumeLivre> recherche() {
-        return busRecherche.posteToutDeSuite(new TousLesLivres()).donnees();
+        return busRecherche.envoieEtAttendReponse(new TousLesLivres()).donnees();
     }
 
     private final BusRecherche busRecherche;

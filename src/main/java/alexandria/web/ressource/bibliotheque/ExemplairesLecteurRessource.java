@@ -20,7 +20,7 @@ public class ExemplairesLecteurRessource extends ServerResource {
         final AjoutExemplaireCommande commande = new AjoutExemplaireCommande();
         commande.email = getAttribute("email");
         commande.isbn = getAttribute("isbn");
-        bus.poste(commande);
+        bus.envoieEtAttendReponse(commande);
     }
 
     private final BusCommande bus;

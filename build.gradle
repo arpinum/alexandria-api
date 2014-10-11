@@ -12,7 +12,7 @@ compileJava.options.encoding = 'UTF-8'
 
 project.ext.with {
     set "restletVersion", "2.2.0"
-    set "mongoLinkVersion", "1.0.2-SNAPSHOT"
+    set "mongoLinkVersion", "1.1.4"
     set "guiceVersion", "4.0-beta4"
 }
 test {

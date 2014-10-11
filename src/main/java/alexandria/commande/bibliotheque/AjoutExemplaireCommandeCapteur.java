@@ -3,13 +3,13 @@ package alexandria.commande.bibliotheque;
 import alexandria.modele.LocalisateurEntrepots;
 import alexandria.modele.bibliotheque.Bibliotheque;
 import alexandria.modele.lecteur.Lecteur;
-import fr.arpinum.graine.commande.HandlerCommande;
+import fr.arpinum.graine.commande.CapteurCommande;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class AjoutExemplaireCommandeHandler implements HandlerCommande<AjoutExemplaireCommande, UUID> {
+public class AjoutExemplaireCommandeCapteur implements CapteurCommande<AjoutExemplaireCommande, UUID> {
 
     @Override
     public UUID execute(AjoutExemplaireCommande commande) {

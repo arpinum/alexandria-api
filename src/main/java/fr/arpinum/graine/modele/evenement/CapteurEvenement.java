@@ -1,10 +1,10 @@
 package fr.arpinum.graine.modele.evenement;
 
-import fr.arpinum.graine.infrastructure.bus.HandlerMessage;
+import fr.arpinum.graine.infrastructure.bus.CapteurMessage;
 
 
 @SuppressWarnings("UnusedDeclaration")
-public interface HandlerEvenement<TEvenement extends Evenement> extends HandlerMessage<TEvenement, Void> {
+public interface CapteurEvenement<TEvenement extends Evenement> extends CapteurMessage<TEvenement, Void> {
 
     public void executeEvenement(TEvenement evenement);
 

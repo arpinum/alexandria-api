@@ -10,7 +10,7 @@ import java.util.Set;
 public class BusRecherche extends BusAsynchrone {
 
     @Inject
-    public BusRecherche(Set<HandlerRecherche> handlers) {
+    public BusRecherche(Set<CapteurRecherche> handlers) {
         super(Sets.newHashSet(), handlers);
     }
 

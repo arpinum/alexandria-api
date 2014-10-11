@@ -11,7 +11,7 @@ import java.util.Set;
 public class BusCommande extends BusAsynchrone {
 
     @Inject
-    public BusCommande(Set<SynchronisationCommande> synchronisations, Set<HandlerCommande> handlers) {
+    public BusCommande(Set<SynchronisationCommande> synchronisations, Set<CapteurCommande> handlers) {
         super(synchronisations, handlers);
     }
 }

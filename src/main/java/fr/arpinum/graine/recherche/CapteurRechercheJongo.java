@@ -5,7 +5,7 @@ import org.jongo.Jongo;
 import javax.inject.Inject;
 
 @SuppressWarnings("UnusedDeclaration")
-public abstract class HandlerRechercheJongo<TRecherche extends Recherche<TReponse>, TReponse> implements HandlerRecherche<TRecherche, TReponse> {
+public abstract class CapteurRechercheJongo<TRecherche extends Recherche<TReponse>, TReponse> implements CapteurRecherche<TRecherche, TReponse> {
 
     public Jongo getJongo() {
         return jongo;

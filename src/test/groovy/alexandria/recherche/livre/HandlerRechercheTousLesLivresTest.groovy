@@ -15,7 +15,7 @@ class HandlerRechercheTousLesLivresTest extends Specification {
         jongo.collection("vue_resumelivre") << [_id: "isbn", titre: "Harry Potter", nombre: 2]
 
         when:
-        def resultats = new HandlerRechercheTousLesLivres().execute(new TousLesLivres(), jongo.jongo())
+        def resultats = new CapteurRechercheTousLesLivres().execute(new TousLesLivres(), jongo.jongo())
 
         then:
         def livre = resultats.first()

@@ -6,29 +6,19 @@ import catalogue.CatalogueLivre;
 import catalogue.googlebooks.CatalogueLivreGoogle;
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import fr.arpinum.graine.commande.BusCommande;
-import fr.arpinum.graine.commande.HandlerCommande;
-import fr.arpinum.graine.commande.SynchronisationCommande;
-import fr.arpinum.graine.commande.ValidateurCommande;
+import fr.arpinum.graine.commande.*;
 import fr.arpinum.graine.infrastructure.bus.guice.BusMagique;
 import fr.arpinum.graine.infrastructure.persistance.mongo.ContexteMongoLink;
-import fr.arpinum.graine.modele.evenement.BusEvenement;
-import fr.arpinum.graine.modele.evenement.BusEvenementAsynchrone;
-import fr.arpinum.graine.modele.evenement.HandlerEvenement;
-import fr.arpinum.graine.modele.evenement.SynchronisationEvenement;
+import fr.arpinum.graine.modele.evenement.*;
 import fr.arpinum.graine.recherche.BusRecherche;
-import fr.arpinum.graine.recherche.HandlerRecherche;
+import fr.arpinum.graine.recherche.CapteurRecherche;
 import org.jongo.Jongo;
-import org.mongolink.MongoSessionManager;
-import org.mongolink.Settings;
-import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.*;
 import org.mongolink.domain.mapper.ContextBuilder;
 
 import javax.validation.Validation;
@@ -39,7 +29,7 @@ import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Preconditions.*;
 
 public class ConfigurationGuice extends AbstractModule {
     @Override
@@ -77,7 +67,7 @@ public class ConfigurationGuice extends AbstractModule {
     }
 
     private void configureRecherches() {
-        BusMagique.scanPackageEtBind("alexandria.recherche", HandlerRecherche.class, binder());
+        BusMagique.scanPackageEtBind("alexandria.recherche", CapteurRecherche.class, binder());
         bind(BusRecherche.class).asEagerSingleton();
     }
 
@@ -85,14 +75,14 @@ public class ConfigurationGuice extends AbstractModule {
         final Multibinder<SynchronisationCommande> multibinder = Multibinder.newSetBinder(binder(), SynchronisationCommande.class);
         multibinder.addBinding().to(ValidateurCommande.class);
         multibinder.addBinding().to(ContexteMongoLink.class);
-        BusMagique.scanPackageEtBind("alexandria.commande", HandlerCommande.class, binder());
+        BusMagique.scanPackageEtBind("alexandria.commande", CapteurCommande.class, binder());
         bind(BusCommande.class).asEagerSingleton();
     }
 
     private void configureEvements() {
         final Multibinder<SynchronisationEvenement> multibinder = Multibinder.newSetBinder(binder(), SynchronisationEvenement.class);
         multibinder.addBinding().to(ContexteMongoLink.class);
-        BusMagique.scanPackageEtBind("alexandria", HandlerEvenement.class, binder());
+        BusMagique.scanPackageEtBind("alexandria", CapteurEvenement.class, binder());
         bind(BusEvenement.class).to(BusEvenementAsynchrone.class).asEagerSingleton();
     }
 

@@ -60,6 +60,6 @@ class HandlerExemplaireAjouteTest extends Specification {
 
     private capteur() {
         catalogue.parIsbn(_) >> Optional.of(new DetailsLivre())
-        new HandlerExemplaireAjoute(jongo.jongo(), catalogue)
+        new CapteurExemplaireAjoute(jongo.jongo(), catalogue)
     }
 }

@@ -3,7 +3,7 @@ package fr.arpinum.graine.infrastructure.bus;
 
 import com.google.common.reflect.TypeToken;
 
-public interface HandlerMessage<TCommande extends Message<TReponse>, TReponse> {
+public interface CapteurMessage<TCommande extends Message<TReponse>, TReponse> {
 
     TReponse execute(TCommande commande);
 

@@ -3,17 +3,17 @@ package alexandria.recherche.livre;
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
-import fr.arpinum.graine.modele.evenement.HandlerEvenement;
+import fr.arpinum.graine.modele.evenement.CapteurEvenement;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class HandlerExemplaireAjoute implements HandlerEvenement<ExemplaireAjouteEvenement> {
+public class CapteurExemplaireAjoute implements CapteurEvenement<ExemplaireAjouteEvenement> {
 
     @Inject
-    public HandlerExemplaireAjoute(Jongo jongo, CatalogueLivre catalogue) {
+    public CapteurExemplaireAjoute(Jongo jongo, CatalogueLivre catalogue) {
         this.jongo = jongo;
         this.catalogue = catalogue;
     }
