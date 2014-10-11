@@ -1,7 +1,5 @@
 package alexandria.modele.lecteur;
 
-import alexandria.modele.bibliotheque.Exemplaire;
-import alexandria.modele.emprunt.Emprunt;
 import fr.arpinum.graine.modele.Racine;
 
 public class Lecteur implements Racine<String>{
@@ -19,9 +17,6 @@ public class Lecteur implements Racine<String>{
         return email;
     }
 
-    public Emprunt emprunte(Exemplaire exemplaire) {
-        return new Emprunt(exemplaire, email);
-    }
 
     private String email;
 }

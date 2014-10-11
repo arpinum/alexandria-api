@@ -1,7 +1,6 @@
 package alexandria.modele;
 
 import alexandria.modele.bibliotheque.EntrepotBibliotheques;
-import alexandria.modele.emprunt.EntrepotEmprunt;
 
 public abstract class LocalisateurEntrepots {
 
@@ -14,10 +13,6 @@ public abstract class LocalisateurEntrepots {
     }
 
     protected abstract EntrepotBibliotheques getBibliotheques();
-
-    public static EntrepotEmprunt emprunts() {return instance.getEmprunt();}
-
-    protected abstract EntrepotEmprunt getEmprunt();
 
     private static LocalisateurEntrepots instance;
 }
