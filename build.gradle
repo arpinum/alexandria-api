@@ -33,7 +33,7 @@ dependencies {
 
     compile "org.restlet.jse:org.restlet:$restletVersion"
     compile "org.restlet.jse:org.restlet.ext.json:$restletVersion"
-    compile "org.restlet.jse:org.restlet.ext.jackson:${restletVersion}"
+    compile "org.restlet.jse:org.restlet.ext.gson:${restletVersion}"
     compile "org.restlet.jse:org.restlet.ext.jetty:$restletVersion"
     compile "org.restlet.jse:org.restlet.ext.jsslutils:$restletVersion"
 
