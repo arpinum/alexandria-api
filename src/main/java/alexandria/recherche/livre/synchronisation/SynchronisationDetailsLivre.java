@@ -27,7 +27,7 @@ public class SynchronisationDetailsLivre implements CapteurEvenement<ExemplaireA
         final Bibliotheque bibliotheque = LocalisateurEntrepots.bibliotheques().get(evenement.idBibliotheque);
         final Optional<Livre> livreEventuel = Optional.ofNullable(jongo.getCollection("vue_detailslivre").findOne("{_id:#}", evenement.isbn).as(Livre.class));
         Livre livre = livreEventuel.orElseGet(creeLivre(evenement));
-        livre.exemplaires.add(new ResumeExemplaire(bibliotheque.emailLecteur()));
+        livre.exemplaires.add(new ResumeExemplaire(bibliotheque));
         jongo.getCollection("vue_detailslivre").update("{_id:#}", livre.isbn).upsert().with(livre);
 
     }

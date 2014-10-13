@@ -45,5 +45,7 @@ class SynchronisationDetailsLivreTest extends Specification {
         record.image == "image"
         record.exemplaires != null
         record.exemplaires[0].emailLecteur == "email@email"
+        record.exemplaires[0].idBibliotheque == bibliotheque.id
+        record.exemplaires[0].disponible
     }
 }
