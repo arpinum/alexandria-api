@@ -5,6 +5,7 @@ import alexandria.web.configuration.ConfigurationGuice;
 import alexandria.web.ressource.IndexRessource;
 import alexandria.web.ressource.bibliotheque.ExemplairesLecteurRessource;
 import alexandria.web.ressource.catalogue.RechercheRessource;
+import alexandria.web.ressource.emprunt.EmpruntsRessource;
 import alexandria.web.ressource.livre.LivreRessource;
 import alexandria.web.ressource.livre.LivresRessource;
 import com.google.inject.*;
@@ -41,6 +42,7 @@ public class AlexandriaApplication extends BaseApplication {
             @Override
             protected void route() {
                 attach("/livres", LivresRessource.class);
+                attach("/emprunts", EmpruntsRessource.class);
                 attach("/livres/{isbn}", LivreRessource.class);
                 attach("/recherche", RechercheRessource.class);
                 attach("/lecteurs/{email}/exemplaires/{isbn}", ExemplairesLecteurRessource.class);

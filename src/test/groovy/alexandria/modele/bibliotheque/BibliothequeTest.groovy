@@ -40,13 +40,29 @@ class BibliothequeTest extends Specification {
         def uneBibliotheque = uneBibliotheque()
 
         when:
-        def exemplaire = uneBibliotheque.ajouteExemplaire("mon isbn")
+        uneBibliotheque.ajouteExemplaire("mon isbn")
 
         then:
         def evenement = busEvenement.bus().dernierEvement(ExemplaireAjouteEvenement)
         evenement != null
         evenement.isbn == "mon isbn"
         evenement.idBibliotheque == uneBibliotheque.getId()
+    }
+
+    def "peut rechercher un exemplaire"() {
+        given:
+        def bibliotheque = uneBibliotheque()
+        bibliotheque.ajouteExemplaire("isbn")
+        bibliotheque.ajouteExemplaire("autre")
+
+        when:
+        def exemplaireEventuel = bibliotheque.trouve("isbn")
+
+        then:
+        exemplaireEventuel != null
+        exemplaireEventuel.isPresent()
+        exemplaireEventuel.get().isbn == "isbn"
+
     }
 
     Bibliotheque uneBibliotheque() {

@@ -1,4 +1,4 @@
-package alexandria.recherche.livre;
+package alexandria.recherche.livre.details.modele;
 
 import catalogue.DetailsLivre;
 import com.google.common.collect.Lists;

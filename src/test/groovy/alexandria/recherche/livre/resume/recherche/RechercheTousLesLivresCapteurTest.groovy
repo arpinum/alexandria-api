@@ -1,10 +1,10 @@
-package alexandria.recherche.livre
+package alexandria.recherche.livre.resume.recherche
 
 import fr.arpinum.graine.recherche.AvecJongo
 import org.junit.Rule
 import spock.lang.Specification
 
-class HandlerRechercheTousLesLivresTest extends Specification {
+class RechercheTousLesLivresCapteurTest extends Specification {
 
     @Rule
     public AvecJongo jongo = new AvecJongo()
@@ -15,7 +15,7 @@ class HandlerRechercheTousLesLivresTest extends Specification {
         jongo.collection("vue_resumelivre") << [_id: "isbn", titre: "Harry Potter", nombre: 2]
 
         when:
-        def resultats = new CapteurRechercheTousLesLivres().execute(new TousLesLivres(), jongo.jongo())
+        def resultats = new RechercheTousLesLivresCapteur().execute(new TousLesLivres(), jongo.jongo())
 
         then:
         def livre = resultats.first()

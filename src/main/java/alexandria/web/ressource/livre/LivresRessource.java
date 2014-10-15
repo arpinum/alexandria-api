@@ -1,7 +1,7 @@
 package alexandria.web.ressource.livre;
 
-import alexandria.recherche.livre.ResumeLivre;
-import alexandria.recherche.livre.TousLesLivres;
+import alexandria.recherche.livre.resume.modele.ResumeLivre;
+import alexandria.recherche.livre.resume.recherche.TousLesLivres;
 import fr.arpinum.graine.recherche.BusRecherche;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;

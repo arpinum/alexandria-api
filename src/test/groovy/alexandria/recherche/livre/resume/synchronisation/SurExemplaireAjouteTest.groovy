@@ -1,14 +1,12 @@
-package alexandria.recherche.livre
-
+package alexandria.recherche.livre.resume.synchronisation
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
-import alexandria.recherche.livre.synchronisation.SynchronisationResumeLivre
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
 import fr.arpinum.graine.recherche.AvecJongo
 import org.junit.Rule
 import spock.lang.Specification
 
-class HandlerExemplaireAjouteTest extends Specification {
+class SurExemplaireAjouteTest extends Specification {
 
     @Rule
     public AvecJongo jongo = new AvecJongo()
@@ -61,6 +59,6 @@ class HandlerExemplaireAjouteTest extends Specification {
 
     private capteur() {
         catalogue.parIsbn(_) >> Optional.of(new DetailsLivre())
-        new SynchronisationResumeLivre(jongo.jongo(), catalogue)
+        new SurExemplaireAjoute(jongo.jongo(), catalogue)
     }
 }

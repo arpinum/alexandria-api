@@ -6,8 +6,7 @@ import com.google.common.collect.Lists;
 import fr.arpinum.graine.modele.RacineAvecUuid;
 import fr.arpinum.graine.modele.evenement.BusEvenement;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Bibliotheque implements RacineAvecUuid {
 
@@ -36,14 +35,9 @@ public class Bibliotheque implements RacineAvecUuid {
     }
 
     public Exemplaire ajouteExemplaire(String isbn) {
-        final Exemplaire exemplaire = ajouteNouvelExemplaire(isbn);
-        publieEvenement(isbn);
-        return  exemplaire;
-    }
-
-    private Exemplaire ajouteNouvelExemplaire(String isbn) {
         final Exemplaire exemplaire = new Exemplaire(isbn, this.getId());
         exemplaires.add(exemplaire);
+        publieEvenement(isbn);
         return exemplaire;
     }
 
@@ -53,6 +47,10 @@ public class Bibliotheque implements RacineAvecUuid {
 
     public boolean contient(Exemplaire exemplaire) {
         return exemplaires.contains(exemplaire);
+    }
+
+    public Optional<Exemplaire> trouve(String isbn) {
+        return exemplaires.stream().filter(e -> e.isbn().equals(isbn)).findFirst();
     }
 
     private UUID identifiant;

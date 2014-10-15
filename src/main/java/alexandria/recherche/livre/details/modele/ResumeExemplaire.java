@@ -1,4 +1,4 @@
-package alexandria.recherche.livre;
+package alexandria.recherche.livre.details.modele;
 
 import alexandria.modele.bibliotheque.Bibliotheque;
 

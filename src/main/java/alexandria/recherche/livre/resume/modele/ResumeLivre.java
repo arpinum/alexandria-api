@@ -1,4 +1,4 @@
-package alexandria.recherche.livre;
+package alexandria.recherche.livre.resume.modele;
 
 import org.jongo.marshall.jackson.oid.Id;
 

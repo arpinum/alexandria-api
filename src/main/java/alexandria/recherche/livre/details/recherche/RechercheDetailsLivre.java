@@ -1,5 +1,6 @@
-package alexandria.recherche.livre;
+package alexandria.recherche.livre.details.recherche;
 
+import alexandria.recherche.livre.details.modele.Livre;
 import fr.arpinum.graine.recherche.Recherche;
 
 public class RechercheDetailsLivre extends Recherche<Livre> {

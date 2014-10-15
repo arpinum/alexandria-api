@@ -1,5 +1,4 @@
-package alexandria.recherche.livre.synchronisation
-
+package alexandria.recherche.livre.details.synchronisation
 import alexandria.infrastructure.persistance.memoire.AvecEntrepotsMemoire
 import alexandria.modele.LocalisateurEntrepots
 import alexandria.modele.bibliotheque.Bibliotheque
@@ -11,7 +10,7 @@ import fr.arpinum.graine.recherche.AvecJongo
 import org.junit.Rule
 import spock.lang.Specification
 
-class SynchronisationDetailsLivreTest extends Specification {
+class SurExemplaireAjouteTest extends Specification {
 
     @Rule
     AvecJongo jongo = new AvecJongo()
@@ -21,13 +20,13 @@ class SynchronisationDetailsLivreTest extends Specification {
 
     def catalogue = Mock(CatalogueLivre)
 
-    SynchronisationDetailsLivre capteur
+    SurExemplaireAjoute capteur
 
     void setup() {
-        capteur = new SynchronisationDetailsLivre(jongo.jongo(), catalogue)
+        capteur = new SurExemplaireAjoute(jongo.jongo(), catalogue)
     }
 
-    def "peut créer le résumé du livre"() {
+    def "peut créer le détail du livre"() {
         given:
         def bibliotheque = new Bibliotheque(new Lecteur("email@email"))
         def evenement = new ExemplaireAjouteEvenement("isbn", bibliotheque.getId())

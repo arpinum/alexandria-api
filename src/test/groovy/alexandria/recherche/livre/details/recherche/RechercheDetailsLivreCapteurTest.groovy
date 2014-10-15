@@ -1,4 +1,7 @@
-package alexandria.recherche.livre
+package alexandria.recherche.livre.details.recherche
+
+import alexandria.recherche.livre.details.recherche.RechercheDetailsLivre
+import alexandria.recherche.livre.details.recherche.RechercheDetailsLivreCapteur
 import fr.arpinum.graine.recherche.AvecJongo
 import org.junit.Rule
 import spock.lang.Specification
