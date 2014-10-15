@@ -23,6 +23,7 @@ class EntrepotEmpruntMongolinkTest extends Specification {
         given:
         def idBibliotheque = UUID.randomUUID()
         def emprunt = new Emprunt(new Lecteur("email"), new Exemplaire("isbn", idBibliotheque))
+        emprunt.rend()
 
         when:
         entrepot.ajoute(emprunt)
@@ -34,6 +35,7 @@ class EntrepotEmpruntMongolinkTest extends Specification {
         enregistrement.emailLecteur == "email"
         enregistrement.exemplaire != null
         enregistrement.exemplaire.identifiantBibliotheque == idBibliotheque
+        enregistrement.dateRemise != null
     }
 
     def "peut dire qu'un emprunt existe"() {
@@ -48,5 +50,35 @@ class EntrepotEmpruntMongolinkTest extends Specification {
 
         then:
         existe
+    }
+
+    def "un emprunt rendu n'existe pas"() {
+        given:
+        def exemplaire = new Exemplaire("isbn", UUID.randomUUID())
+        def emprunt = new Emprunt(new Lecteur("email"), exemplaire)
+        emprunt.rend()
+        entrepot.ajoute(emprunt)
+        avecMongolink.nettoieSession()
+
+        when:
+        def existe = entrepot.existePour(exemplaire)
+
+        then:
+        !existe
+    }
+
+    def "peut retourner l'emprunt courant d'un exemplaire"() {
+        given:
+        def exemplaire = new Exemplaire("isbn", UUID.randomUUID())
+        def emprunt = new Emprunt(new Lecteur("email"), exemplaire)
+        entrepot.ajoute(emprunt)
+        avecMongolink.nettoieSession()
+
+        when:
+        def empruntEventuel = entrepot.empruntCourantDe(exemplaire)
+
+        then:
+        empruntEventuel.isPresent()
+        empruntEventuel.get().id == emprunt.id
     }
 }

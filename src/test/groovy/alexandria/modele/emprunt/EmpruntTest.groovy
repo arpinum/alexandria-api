@@ -57,4 +57,47 @@ class EmpruntTest extends Specification {
         evenement != null
         evenement.emprunt == emprunt.id
     }
+
+    def "un emprunt n'est pas rendu par défaut"() {
+        given:
+        def lecteur = new Lecteur("email")
+        def bibliotheque = new Bibliotheque(new Lecteur("test"))
+        bibliotheque.ajouteExemplaire("isbn")
+
+        when:
+        def emprunt = lecteur.emprunte(bibliotheque, "isbn")
+
+        then:
+        !emprunt.rendu()
+    }
+
+    def "peut rendre un emprunt"() {
+        given:
+        def lecteur = new Lecteur("email")
+        def bibliotheque = new Bibliotheque(new Lecteur("test"))
+        bibliotheque.ajouteExemplaire("isbn")
+        def emprunt = lecteur.emprunte(bibliotheque, "isbn")
+
+        when:
+        emprunt.rend()
+
+        then:
+        emprunt.rendu()
+    }
+
+    def "propage un évènement quand l'emprunt est rendu"() {
+        given:
+        def lecteur = new Lecteur("email")
+        def bibliotheque = new Bibliotheque(new Lecteur("test"))
+        bibliotheque.ajouteExemplaire("isbn")
+        def emprunt = lecteur.emprunte(bibliotheque, "isbn")
+
+        when:
+        emprunt.rend()
+
+        then:
+        def evenement = busEvenement.bus().dernierEvement(EmpruntRenduEvenement)
+        evenement != null;
+        evenement.emprunt == emprunt.id
+    }
 }

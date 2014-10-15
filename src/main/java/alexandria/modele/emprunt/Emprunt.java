@@ -3,7 +3,9 @@ package alexandria.modele.emprunt;
 import alexandria.modele.bibliotheque.Exemplaire;
 import alexandria.modele.lecteur.Lecteur;
 import fr.arpinum.graine.modele.RacineAvecUuid;
+import fr.arpinum.graine.modele.evenement.BusEvenement;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class Emprunt implements RacineAvecUuid {
@@ -31,8 +33,18 @@ public class Emprunt implements RacineAvecUuid {
         return exemplaire;
     }
 
+    public boolean rendu() {
+        return dateRemise != null;
+    }
+
+    public void rend() {
+        this.dateRemise = new Date();
+        BusEvenement.INSTANCE().publie(new EmpruntRenduEvenement(getId()));
+    }
+
 
     private String emailLecteur;
     private Exemplaire exemplaire;
     private UUID id = UUID.randomUUID();
+    private Date dateRemise;
 }

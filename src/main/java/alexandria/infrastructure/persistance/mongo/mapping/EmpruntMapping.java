@@ -10,5 +10,6 @@ public class EmpruntMapping extends AggregateMap<Emprunt>{
         id().onProperty(element().getId()).natural();
         property().onProperty(element().getEmailLecteur());
         property().onProperty(element().getExemplaire());
+        property().onField("dateRemise");
     }
 }
