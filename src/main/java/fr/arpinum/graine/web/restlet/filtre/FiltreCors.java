@@ -1,11 +1,7 @@
 package fr.arpinum.graine.web.restlet.filtre;
 
-import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.data.Method;
-import org.restlet.data.Status;
-import org.restlet.engine.header.Header;
+import org.restlet.*;
+import org.restlet.data.*;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.routing.Filter;
 import org.restlet.util.Series;

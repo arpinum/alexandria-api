@@ -4,6 +4,7 @@ import alexandria.modele.bibliotheque.Exemplaire
 import alexandria.modele.emprunt.Emprunt
 import alexandria.modele.lecteur.Lecteur
 import fr.arpinum.graine.infrastructure.persistance.mongo.AvecMongolink
+import fr.arpinum.graine.modele.evenement.AvecBusEvenement
 import org.junit.Rule
 import spock.lang.Specification
 
@@ -11,6 +12,9 @@ class EntrepotEmpruntMongolinkTest extends Specification {
 
     @Rule
     AvecMongolink avecMongolink = AvecMongolink.avecPackage("alexandria.infrastructure.persistance.mongo.mapping")
+
+    @Rule
+    AvecBusEvenement busEvenement = new AvecBusEvenement()
 
     EntrepotEmpruntMongolink entrepot
 

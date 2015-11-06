@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -8,12 +9,18 @@ repositories {
     maven { url 'http://repository-mongolink.forge.cloudbees.com/snapshot' }
 }
 
-compileJava.options.encoding = 'UTF-8'
+allprojects {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+}
 
-project.ext.with {
-    set "restletVersion", "2.2.0"
-    set "mongoLinkVersion", "1.1.4"
-    set "guiceVersion", "4.0-beta4"
+compileJava.options.encoding = 'UTF-8'
+mainClassName = "alexandria.Main"
+
+ext {
+    restletVersion = "2.3.4"
+    mongoLinkVersion = "1.1.4"
+    guiceVersion = "4.0-beta4"
 }
 test {
     testLogging {
@@ -70,3 +77,7 @@ task deps(type: Sync) {
 }
 
 task stage(dependsOn: ['clean', 'deps', 'jar'])
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.8'
+}
