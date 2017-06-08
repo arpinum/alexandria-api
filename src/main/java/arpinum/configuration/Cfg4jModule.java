@@ -33,13 +33,12 @@ public class Cfg4jModule extends AbstractModule {
     @Provides
     @Singleton
     ConfigurationProvider configuration() {
-
         ClasspathConfigurationSource classpath = new ClasspathConfigurationSource(() -> paths);
         FilesConfigurationSource files = new FilesConfigurationSource(() -> paths);
         EnvironmentVariablesConfigurationSource environment = new EnvironmentVariablesConfigurationSource();
         ImmutableEnvironment env = new ImmutableEnvironment("config");
         return new ConfigurationProviderBuilder()
-                .withConfigurationSource(new MergeConfigurationSource(environment, new FallbackConfigurationSource(files, classpath)))
+                .withConfigurationSource(new MergeConfigurationSource(new FallbackConfigurationSource(files, classpath), environment))
                 .withEnvironment(env)
                 .build();
     }
