@@ -7,6 +7,7 @@
 
     <logger name="io.netty" level="INFO"/>
     <logger name="alexandria" level="DEBUG"/>
+    <logger name="catalogue" level="DEBUG"/>
     <logger name="arpinum" level="DEBUG"/>
 
     <root level="INFO">

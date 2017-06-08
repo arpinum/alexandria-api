@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import io.vavr.collection.Seq;
 import io.vavr.collection.Traversable;
 import io.vavr.concurrent.Future;
@@ -20,10 +22,12 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 public class CatalogueLivreGoogle implements CatalogueLivre {
 
-    public CatalogueLivreGoogle(OkHttpClient client, String apiKey) {
+    public CatalogueLivreGoogle(ExecutorService executorService, OkHttpClient client, String apiKey) {
+        this.executorService = executorService;
         this.client = client;
         this.apiKey = apiKey;
     }
@@ -40,33 +44,23 @@ public class CatalogueLivreGoogle implements CatalogueLivre {
         Request request = new Request.Builder()
                 .url(String.format("https://www.googleapis.com/books/v1/volumes?q=%s&key=%s", recherche, apiKey))
                 .build();
-        Promise<Seq<DetailsLivre>> promise = Promise.make();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOGGER.error("Impossible de faire la recherche sur google", e);
-                promise.failure(e);
+        return Future.ofCallable(executorService, () -> {
+            Response response = client.newCall(request).execute();
+            LOGGER.debug("Google response {}", response.code());
+            if (!response.isSuccessful()) {
+                throw new RuntimeException(String.format("%s: %s", response.code(), response.body().string()));
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    promise.failure(new RuntimeException(String.format("%s: %s", response.code(), response.body().string())));
-                    return;
-                }
-                try (Reader reader = response.body().charStream()) {
-                    final CollectionGoogle collectionGoogle = OBJECT_MAPPER.readValue(reader, CollectionGoogle.class);
-                    promise.success(collectionGoogle.enDetailsLivres());
-                } catch (Exception ex) {
-                    promise.failure(ex);
-                }
+            try (Reader reader = response.body().charStream()) {
+                final CollectionGoogle collectionGoogle = OBJECT_MAPPER.readValue(reader, CollectionGoogle.class);
+                return collectionGoogle.enDetailsLivres();
             }
         });
-        return promise.future();
     }
 
-
+    private ExecutorService executorService;
     private final OkHttpClient client;
+
+
     private final String apiKey;
     private static final Logger LOGGER = LoggerFactory.getLogger(CatalogueLivreGoogle.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

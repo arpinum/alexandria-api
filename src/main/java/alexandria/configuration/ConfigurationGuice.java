@@ -31,16 +31,15 @@ public class ConfigurationGuice extends AbstractModule {
     }
 
     @Provides
-    public CatalogueLivre configureCatalogue(ConfigurationProvider provider, OkHttpClient client) {
+    public CatalogueLivre configureCatalogue(ConfigurationProvider provider, OkHttpClient client, @Io ExecutorService service) {
         String apiKey = provider.getProperty("google.apiKey", String.class);
-        return new CatalogueLivreGoogle(client, apiKey);
+        return new CatalogueLivreGoogle(service, client, apiKey);
     }
 
     @Provides
     @Singleton
-    public OkHttpClient client(@Io ExecutorService service) {
+    public OkHttpClient client() {
         return new OkHttpClient.Builder()
-                .dispatcher(new Dispatcher(service))
                 .build();
     }
 
