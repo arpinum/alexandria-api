@@ -2,10 +2,7 @@ package bin;
 
 
 import alexandria.AlexandriaApplication;
-import arpinum.configuration.Cfg4jModule;
-import arpinum.configuration.Configuration;
-import arpinum.configuration.JongoModule;
-import arpinum.configuration.MongoDbModule;
+import arpinum.configuration.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -18,6 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         UndertowJaxrsServer server = new UndertowJaxrsServer();
         Injector parentInjector = Guice.createInjector(stage()
+                , new ExecutorModule()
                 , new Cfg4jModule("app.yaml")
                 , new MongoDbModule()
                 , new JongoModule());

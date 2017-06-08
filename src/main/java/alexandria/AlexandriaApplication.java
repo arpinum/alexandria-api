@@ -1,6 +1,7 @@
 package alexandria;
 
 import alexandria.configuration.ConfigurationGuice;
+import arpinum.configuration.JacksonConfiguration;
 import arpinum.infrastructure.bus.guice.ScanMagique;
 import com.google.inject.Injector;
 
@@ -17,9 +18,11 @@ public class AlexandriaApplication extends Application {
 
     @Override
     public Set<Object> getSingletons() {
-        return ScanMagique.searchForAnnotatedClass("alexandria.web", Path.class)
+        Set<Object> instances = ScanMagique.searchForAnnotatedClass("alexandria.web", Path.class)
                 .stream().map(injector::getInstance)
                 .collect(Collectors.toSet());
+        instances.add(new JacksonConfiguration());
+        return instances;
     }
 
     private final Injector injector;
