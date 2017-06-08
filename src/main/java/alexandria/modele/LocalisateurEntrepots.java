@@ -1,7 +1,8 @@
 package alexandria.modele;
 
 import alexandria.modele.bibliotheque.EntrepotBibliotheques;
-import alexandria.modele.emprunt.EntrepotEmprunts;
+
+import javax.inject.Inject;
 
 public abstract class LocalisateurEntrepots {
 
@@ -13,11 +14,8 @@ public abstract class LocalisateurEntrepots {
         return instance.getBibliotheques();
     }
 
-    public static EntrepotEmprunts emprunts() {return instance.getEmprunts();}
-
-    protected abstract EntrepotEmprunts getEmprunts();
-
     protected abstract EntrepotBibliotheques getBibliotheques();
 
+    @Inject
     private static LocalisateurEntrepots instance;
 }

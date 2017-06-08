@@ -2,10 +2,10 @@ package catalogue.googlebooks;
 
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +36,11 @@ public class CatalogueLivreGoogle implements CatalogueLivre {
         LOGGER.debug("Recherche d'un livre : {}", recherche);
         final URL url = new URL(String.format("https://www.googleapis.com/books/v1/volumes?q=%s", recherche));
         try (Reader reader = Resources.asCharSource(url, Charsets.UTF_8).openStream()) {
-            final CollectionGoogle collectionGoogle = new Gson().fromJson(reader, CollectionGoogle.class);
+            final CollectionGoogle collectionGoogle = OBJECT_MAPPER.readValue(reader, CollectionGoogle.class);
             return collectionGoogle.enDetailsLivres();
         }
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CatalogueLivreGoogle.class);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 }

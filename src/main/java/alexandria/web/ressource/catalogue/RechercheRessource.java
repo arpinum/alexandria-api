@@ -1,21 +1,26 @@
 package alexandria.web.ressource.catalogue;
 
 import catalogue.CatalogueLivre;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 
 import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
-public class RechercheRessource extends ServerResource {
+@Path("/recherche")
+public class RechercheRessource {
 
     @Inject
     public RechercheRessource(CatalogueLivre catalogueLivre) {
         this.catalogueLivre = catalogueLivre;
     }
 
-    @Get
-    public ListeLivre recherche() {
-        return ListeLivre.nouvelle(catalogueLivre.recherche(getQueryValue("q")));
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ListeLivre recherche(@QueryParam("q") String q) {
+        return ListeLivre.nouvelle(catalogueLivre.recherche(q));
     }
 
     private final CatalogueLivre catalogueLivre;

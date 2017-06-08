@@ -4,8 +4,8 @@ import spock.lang.Specification
 
 class ExemplaireTest extends Specification {
 
-    static UUID uuid = UUID.randomUUID()
-    static uuidAutre = UUID.randomUUID()
+    static uuid = UUID.randomUUID().toString()
+    static uuidAutre = UUID.randomUUID().toString()
 
     def "deux exemplaires avec les mêmes propriétés sont égaux"() {
         given:
@@ -16,7 +16,7 @@ class ExemplaireTest extends Specification {
         unAutreExemplaire == unExemplaire
     }
 
-    def "deux exemplaires avec le même isbn mais avec des id de biblio différents, sont différents"(){
+    def "deux exemplaires avec le même isbn mais avec des id de biblio différents, sont différents"() {
         given:
         def unExemplaire = new Exemplaire("toto", uuid)
         def unAutreExemplaire = new Exemplaire("toto", uuidAutre)

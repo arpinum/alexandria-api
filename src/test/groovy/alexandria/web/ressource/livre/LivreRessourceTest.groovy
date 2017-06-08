@@ -1,15 +1,16 @@
 package alexandria.web.ressource.livre
 
-import alexandria.recherche.livre.details.modele.Livre
-import alexandria.recherche.livre.details.recherche.RechercheDetailsLivre
-import fr.arpinum.graine.infrastructure.bus.ResultatExecution
-import fr.arpinum.graine.recherche.BusRecherche
-import fr.arpinum.graine.web.restlet.InitialisateurRessource
+import alexandria.query.livre.details.modele.Livre
+import alexandria.query.livre.details.recherche.RechercheDetailsLivre
+import arpinum.query.QueryBus
+import io.vavr.concurrent.Future
 import spock.lang.Specification
+
+import javax.ws.rs.container.AsyncResponse
 
 class LivreRessourceTest extends Specification {
 
-    def bus = Mock(BusRecherche)
+    def bus = Mock(QueryBus)
 
     LivreRessource ressource
 
@@ -19,14 +20,14 @@ class LivreRessourceTest extends Specification {
 
     def "peut retourner le livre"() {
         given:
-        InitialisateurRessource.pour(ressource).avecParamètre("isbn", "isbn").initialise()
+        def response = Mock(AsyncResponse)
         def livre = new Livre()
-        bus.envoieEtAttendReponse(_ as RechercheDetailsLivre) >> ResultatExecution.succes(livre)
+        bus.send(_ as RechercheDetailsLivre) >> Future.successful(livre)
 
         when:
-        def reponse = ressource.represente()
+        ressource.recherche(response, "isbn")
 
         then:
-        reponse == livre
+        1 * response.resume(livre)
     }
 }

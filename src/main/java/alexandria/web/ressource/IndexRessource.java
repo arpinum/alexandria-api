@@ -1,11 +1,12 @@
 package alexandria.web.ressource;
 
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
-public class IndexRessource extends ServerResource {
+@Path("/")
+public class IndexRessource {
 
-    @Get
+    @GET
     public String représente() {
         return "Hello world";
     }

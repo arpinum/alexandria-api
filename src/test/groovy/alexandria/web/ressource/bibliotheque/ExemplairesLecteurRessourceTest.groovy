@@ -1,28 +1,26 @@
 package alexandria.web.ressource.bibliotheque
 
-import alexandria.commande.bibliotheque.AjoutExemplaireCommande
-import fr.arpinum.graine.commande.BusCommande
-import fr.arpinum.graine.web.restlet.InitialisateurRessource
+import alexandria.command.bibliotheque.AjoutExemplaireCommande
+import arpinum.command.CommandBus
+import io.vavr.concurrent.Future
 import spock.lang.Specification
+
+import javax.ws.rs.container.AsyncResponse
 
 class ExemplairesLecteurRessourceTest extends Specification {
 
-    BusCommande bus = Mock(BusCommande)
+    def bus = Mock(CommandBus)
 
     def "peut demander à créer un exemplaire"() {
         given:
-        AjoutExemplaireCommande commande
         def ressource = new ExemplairesLecteurRessource(bus)
-        InitialisateurRessource.pour(ressource)
-                .avecParamètre("email", "monmail")
-                .avecParamètre("isbn", "iiiiisbn")
-                .initialise()
+        def response = Mock(AsyncResponse)
         when:
-        ressource.ajoute()
+        ressource.ajoute(response, "monmail", "iiiiisbn")
 
         then:
-        1 * bus.envoieEtAttendReponse({
-            it.email == "monmail" && it.isbn == "iiiiisbn"
-        })
+        1 * bus.send({
+            it.idBibliotheque == "monmail" && it.isbn == "iiiiisbn"
+        }) >> Future.successful(UUID.randomUUID())
     }
 }

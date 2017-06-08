@@ -1,24 +1,26 @@
 package alexandria.modele.bibliotheque
+
 import alexandria.modele.lecteur.Lecteur
-import fr.arpinum.graine.modele.evenement.AvecBusEvenement
-import org.junit.Rule
 import spock.lang.Specification
 
 class BibliothequeTest extends Specification {
 
-    @Rule
-    AvecBusEvenement busEvenement = new AvecBusEvenement()
-
     def "peut créer une bibliothèque pour un lecteur"() {
         given:
-        def lecteur = new Lecteur("bob@sponge.com")
-        
+        def lecteur = new Lecteur("id")
+
         when:
-        def bibliotheque = new Bibliotheque(lecteur)
+        def résultat = Bibliotheque.fabrique().pour(lecteur)
 
         then:
-        bibliotheque.emailLecteur() == "bob@sponge.com"
+        résultat != null
+        def bibliotheque = résultat._2
+        bibliotheque.idLecteur() == "id"
         bibliotheque.getId() != null
+        def event = résultat._1
+        event != null
+        event.targetId == bibliotheque.id
+        event.idLecteur == "id"
     }
 
     def "peut contenir un livre"() {
@@ -26,46 +28,37 @@ class BibliothequeTest extends Specification {
         def uneBibliotheque = uneBibliotheque()
 
         when:
-        def exemplaire = uneBibliotheque.ajouteExemplaire("mon isbn")
+        def résultat = uneBibliotheque.ajouteExemplaire(new Lecteur("id"), "mon isbn")
 
         then:
+        def exemplaire = résultat._2()
         exemplaire != null
         exemplaire.isbn() == "mon isbn"
         exemplaire.identifiantBibliotheque() == uneBibliotheque.getId()
         uneBibliotheque.contient(exemplaire)
-    }
-
-    def "émet un évènement en cas d'ajout d'un exemplaire"() {
-        given:
-        def uneBibliotheque = uneBibliotheque()
-
-        when:
-        uneBibliotheque.ajouteExemplaire("mon isbn")
-
-        then:
-        def evenement = busEvenement.bus().dernierEvement(ExemplaireAjouteEvenement)
-        evenement != null
-        evenement.isbn == "mon isbn"
-        evenement.idBibliotheque == uneBibliotheque.getId()
+        def évènement = résultat._1
+        évènement != null
+        évènement.getTargetId() == uneBibliotheque.id
+        évènement.isbn == "mon isbn"
     }
 
     def "peut rechercher un exemplaire"() {
         given:
         def bibliotheque = uneBibliotheque()
-        bibliotheque.ajouteExemplaire("isbn")
-        bibliotheque.ajouteExemplaire("autre")
+        bibliotheque.ajouteExemplaire(new Lecteur(""),"isbn")
+        bibliotheque.ajouteExemplaire(new Lecteur(""),"autre")
 
         when:
         def exemplaireEventuel = bibliotheque.trouve("isbn")
 
         then:
         exemplaireEventuel != null
-        exemplaireEventuel.isPresent()
+        exemplaireEventuel.isDefined()
         exemplaireEventuel.get().isbn == "isbn"
 
     }
 
     Bibliotheque uneBibliotheque() {
-        return new Bibliotheque(new Lecteur(""));
+        return new Bibliotheque("id", new Lecteur(""));
     }
 }

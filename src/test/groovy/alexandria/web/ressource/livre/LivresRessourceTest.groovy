@@ -1,12 +1,15 @@
 package alexandria.web.ressource.livre
-import alexandria.recherche.livre.resume.modele.ResumeLivre
-import fr.arpinum.graine.infrastructure.bus.ResultatExecution
-import fr.arpinum.graine.recherche.BusRecherche
+
+import alexandria.query.livre.resume.modele.ResumeLivre
+import arpinum.query.QueryBus
+import io.vavr.concurrent.Future
 import spock.lang.Specification
+
+import javax.ws.rs.container.AsyncResponse
 
 class LivresRessourceTest extends Specification {
 
-    BusRecherche bus = Mock(BusRecherche)
+    def bus = Mock(QueryBus)
     LivresRessource ressource
 
     void setup() {
@@ -16,12 +19,13 @@ class LivresRessourceTest extends Specification {
     def "retourne bien tous les livres"() {
         given:
         def livres = [new ResumeLivre()]
-        bus.envoieEtAttendReponse(_) >> ResultatExecution.succes(livres)
+        bus.send(_) >> Future.successful(livres)
+        def response = Mock(AsyncResponse)
 
         when:
-        def reponse = ressource.recherche()
+        ressource.recherche(response)
 
         then:
-        reponse == livres
+        1 * response.resume(livres)
     }
 }

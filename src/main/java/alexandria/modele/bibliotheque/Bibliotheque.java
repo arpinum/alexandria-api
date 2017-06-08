@@ -1,62 +1,66 @@
 package alexandria.modele.bibliotheque;
 
 import alexandria.modele.lecteur.Lecteur;
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
-import fr.arpinum.graine.modele.RacineAvecUuid;
-import fr.arpinum.graine.modele.evenement.BusEvenement;
+import arpinum.ddd.BaseAggregate;
+import com.google.common.base.MoreObjects;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
-import java.util.*;
 
-public class Bibliotheque implements RacineAvecUuid {
+public class Bibliotheque extends BaseAggregate<String> {
+
+    public static Fabrique fabrique() {
+        return new Fabrique();
+    }
 
     @SuppressWarnings("UnusedDeclaration")
     protected Bibliotheque() {
-        // pour mongolink
+
     }
 
-    public Bibliotheque(Lecteur lecteur) {
-        emailLecteur = lecteur.getEmail();
-        identifiant = UUID.randomUUID();
+    public Bibliotheque(String id, Lecteur lecteur) {
+        setId(id);
+        idLecteur = lecteur.getId();
     }
 
-    @Override
-    public UUID getId() {
-        return identifiant;
-    }
-
-    public String emailLecteur() {
-        return emailLecteur;
+    public String idLecteur() {
+        return idLecteur;
     }
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(getClass()).add("id", getId()).toString();
+        return MoreObjects.toStringHelper(getClass()).add("id", getId()).toString();
     }
 
-    public Exemplaire ajouteExemplaire(String isbn) {
+    public Tuple2<ExemplaireAjouteEvenement, Exemplaire> ajouteExemplaire(Lecteur lecteur, String isbn) {
         final Exemplaire exemplaire = new Exemplaire(isbn, this.getId());
-        exemplaires.add(exemplaire);
-        publieEvenement(isbn);
-        return exemplaire;
+        exemplaires = exemplaires.append(exemplaire);
+        return Tuple.of(nouvelExemplaire(isbn), exemplaire);
     }
 
-    private void publieEvenement(String isbn) {
-        BusEvenement.INSTANCE().publie(new ExemplaireAjouteEvenement(isbn, this.getId()));
+    private ExemplaireAjouteEvenement nouvelExemplaire(String isbn) {
+        return new ExemplaireAjouteEvenement(this.getId(), isbn);
     }
 
     public boolean contient(Exemplaire exemplaire) {
         return exemplaires.contains(exemplaire);
     }
 
-    public Optional<Exemplaire> trouve(String isbn) {
-        return exemplaires.stream().filter(e -> e.isbn().equals(isbn)).findFirst();
+    public Option<Exemplaire> trouve(String isbn) {
+        return exemplaires.find(e -> e.isbn().equals(isbn));
     }
 
-    private UUID identifiant;
+    private String idLecteur;
 
-    private String emailLecteur;
+    private List<Exemplaire> exemplaires = List.empty();
 
-    private List<Exemplaire> exemplaires = Lists.newArrayList();
+    public static class Fabrique {
+
+        public Tuple2<BibliothequeCréée, Bibliotheque> pour(Lecteur lecteur) {
+            return Tuple.of(new BibliothequeCréée(lecteur.getId(), lecteur), new Bibliotheque(lecteur.getId(), lecteur));
+        }
+    }
 
 }

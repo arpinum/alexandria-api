@@ -1,7 +1,6 @@
 package alexandria.web.ressource.catalogue
 
 import catalogue.CatalogueLivre
-import fr.arpinum.graine.web.restlet.InitialisateurRessource
 import spock.lang.Specification
 
 class RechercheRessourceTest extends Specification {
@@ -12,10 +11,9 @@ class RechercheRessourceTest extends Specification {
         def livres = []
         catalogue.recherche("lachaine") >> livres
         def ressource = new RechercheRessource(catalogue)
-        InitialisateurRessource.pour(ressource).avecQuery("q", "lachaine").initialise()
 
         when:
-        def résultat = ressource.recherche()
+        def résultat = ressource.recherche("lachaine")
 
         then:
         résultat != null

@@ -1,26 +1,32 @@
 package alexandria.web.ressource.livre;
 
-import alexandria.recherche.livre.details.modele.Livre;
-import alexandria.recherche.livre.details.recherche.RechercheDetailsLivre;
-import fr.arpinum.graine.infrastructure.bus.ResultatExecution;
-import fr.arpinum.graine.recherche.BusRecherche;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
+import alexandria.query.livre.details.recherche.RechercheDetailsLivre;
+import arpinum.query.QueryBus;
 
 import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.MediaType;
 
-public class LivreRessource extends ServerResource {
+@Path("/livres/{isbn}")
+public class LivreRessource {
 
     @Inject
-    public LivreRessource(BusRecherche recherche) {
+    public LivreRessource(QueryBus recherche) {
         this.recherche = recherche;
     }
 
-    @Get
-    public Livre represente() {
-        final ResultatExecution<Livre> résultat = recherche.envoieEtAttendReponse(new RechercheDetailsLivre(getAttribute("isbn")));
-        return résultat.donnees();
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public void recherche(@Suspended AsyncResponse response, @PathParam("isbn") String isbn) {
+        recherche.send(new RechercheDetailsLivre(isbn))
+                .onSuccess(response::resume)
+                .onFailure(response::resume);
     }
 
-    private final BusRecherche recherche;
+    private final QueryBus recherche;
 }

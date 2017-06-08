@@ -1,18 +1,20 @@
 package alexandria.modele.bibliotheque;
 
-import fr.arpinum.graine.modele.evenement.Evenement;
-import fr.arpinum.graine.modele.evenement.Synchrone;
+import arpinum.ddd.event.Event;
 
-import java.util.UUID;
+public class ExemplaireAjouteEvenement extends Event<Bibliotheque> {
 
-@Synchrone
-public class ExemplaireAjouteEvenement implements Evenement {
-
-    public ExemplaireAjouteEvenement(String isbn, UUID idBibliotheque) {
-        this.isbn = isbn;
-        this.idBibliotheque = idBibliotheque;
+    @SuppressWarnings("unused")
+    protected ExemplaireAjouteEvenement() {
     }
 
-    public final String isbn;
-    public final UUID idBibliotheque;
+    public ExemplaireAjouteEvenement(String idBibliotheque, String isbn) {
+        super(idBibliotheque);
+        this.isbn = isbn;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+    private String isbn;
 }

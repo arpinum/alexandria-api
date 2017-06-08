@@ -1,15 +1,13 @@
 package alexandria.modele.bibliotheque;
 
 import com.google.common.base.Objects;
-import java.util.UUID;
 
 public class Exemplaire {
 
     protected Exemplaire() {
-        // pour mongolink
     }
 
-    public Exemplaire(String isbn, UUID identifiantBibliotheque) {
+    public Exemplaire(String isbn, String identifiantBibliotheque) {
         this.isbn = isbn;
         this.identifiantBibliotheque = identifiantBibliotheque;
 
@@ -33,10 +31,10 @@ public class Exemplaire {
         return Objects.hashCode(isbn, identifiantBibliotheque);
     }
 
-    public UUID identifiantBibliotheque() {
+    public String identifiantBibliotheque() {
         return this.identifiantBibliotheque;
     }
 
     private String isbn;
-    private UUID identifiantBibliotheque;
+    private String identifiantBibliotheque;
 }
