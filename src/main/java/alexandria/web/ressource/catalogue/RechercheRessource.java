@@ -7,6 +7,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 
 @Path("/recherche")
@@ -19,8 +21,10 @@ public class RechercheRessource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ListeLivre recherche(@QueryParam("q") String q) {
-        return ListeLivre.nouvelle(catalogueLivre.recherche(q));
+    public void recherche(@Suspended AsyncResponse response, @QueryParam("q") String q) {
+        catalogueLivre.recherche(q)
+                .onSuccess(response::resume)
+                .onFailure(response::resume);
     }
 
     private final CatalogueLivre catalogueLivre;

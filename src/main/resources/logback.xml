@@ -1,14 +1,15 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>jamshake:api>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%cyan(%thread)][%highlight(%-5level)][%boldGreen(%logger{5})] %m%n</pattern>
         </encoder>
     </appender>
 
+    <logger name="io.netty" level="INFO"/>
+    <logger name="alexandria" level="DEBUG"/>
+    <logger name="arpinum" level="DEBUG"/>
+
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUT" />
     </root>
-    <logger name="fr.arpinum" additivity="false" level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </logger>
 </configuration>

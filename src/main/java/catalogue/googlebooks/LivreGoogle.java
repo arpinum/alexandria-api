@@ -1,10 +1,12 @@
 package catalogue.googlebooks;
 
 import catalogue.DetailsLivre;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LivreGoogle {
 
     public DetailsLivre enDetailsLivre() {

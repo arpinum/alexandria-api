@@ -5,6 +5,8 @@ import alexandria.query.livre.resume.modele.ResumeLivre;
 import arpinum.ddd.event.EventCaptor;
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
+import io.vavr.concurrent.Future;
+import io.vavr.control.Option;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
@@ -35,9 +37,10 @@ public class SurExemplaireAjoute implements EventCaptor<ExemplaireAjouteEvenemen
     }
 
     private void enregistreUnNouvelExemplaire(ExemplaireAjouteEvenement evenement, MongoCollection collection) {
-        final Optional<DetailsLivre> details = catalogue.parIsbn(evenement.getIsbn());
-
-        collection.save(new ResumeLivre(evenement.getIsbn(), details.orElse(DetailsLivre.LIVRE_VIDE).titre));
+        final Future<Option<DetailsLivre>> details = catalogue.parIsbn(evenement.getIsbn());
+        details.map(o -> o.getOrElse(DetailsLivre.LIVRE_VIDE))
+                .map(d -> new ResumeLivre(evenement.getIsbn(), d.titre))
+                .onSuccess(collection::save);
     }
 
     private final Jongo jongo;
