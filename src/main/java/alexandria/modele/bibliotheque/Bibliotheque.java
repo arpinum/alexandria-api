@@ -42,7 +42,7 @@ public class Bibliotheque extends BaseAggregate<String> {
     }
 
     private ExemplaireAjouteEvenement nouvelExemplaire(String isbn) {
-        return new ExemplaireAjouteEvenement(this.getId(), isbn);
+        return new ExemplaireAjouteEvenement(this.getId(), idLecteur, isbn);
     }
 
     public boolean contient(Exemplaire exemplaire) {

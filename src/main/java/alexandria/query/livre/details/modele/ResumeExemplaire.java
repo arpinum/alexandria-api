@@ -8,9 +8,9 @@ public class ResumeExemplaire {
     public ResumeExemplaire() {
     }
 
-    public ResumeExemplaire(Bibliotheque bibliotheque) {
-        this.emailLecteur = bibliotheque.idLecteur();
-        this.idBibliotheque = bibliotheque.getId();
+    public ResumeExemplaire(String idLecteur, String idBibliotheque) {
+        this.emailLecteur = idLecteur;
+        this.idBibliotheque = idBibliotheque;
     }
 
     public String emailLecteur;

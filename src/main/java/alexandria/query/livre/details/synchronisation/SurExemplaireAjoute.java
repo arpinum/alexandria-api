@@ -2,10 +2,11 @@ package alexandria.query.livre.details.synchronisation;
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
 import alexandria.query.livre.details.modele.Livre;
+import alexandria.query.livre.details.modele.ResumeExemplaire;
 import arpinum.ddd.event.EventCaptor;
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
-import io.vavr.concurrent.Future;
+import io.vavr.control.Option;
 import org.jongo.Jongo;
 
 import javax.inject.Inject;
@@ -20,18 +21,20 @@ public class SurExemplaireAjoute implements EventCaptor<ExemplaireAjouteEvenemen
 
     @Override
     public void execute(ExemplaireAjouteEvenement evenement) {
-        //final Bibliotheque bibliotheque = LocalisateurEntrepots.bibliotheques().get(evenement.getIdBibliotheque());
-        //final Optional<Livre> livreEventuel = Optional.ofNullable(jongo.getCollection("vue_detailslivre").findOne("{_id:#}", evenement.getIsbn()).as(Livre.class));
-        //Livre livre = livreEventuel.orElseGet(creeLivre(evenement));
-        //livre.exemplaires.add(new ResumeExemplaire(bibliotheque));
-        //jongo.getCollection("vue_detailslivre").update("{_id:#}", livre.isbn).upsert().with(livre);
+        final Option<Livre> livreEventuel = Option.of(jongo.getCollection("vue_detailslivre").findOne("{_id:#}", evenement.getIsbn()).as(Livre.class));
+
+        livreEventuel.orElse(() -> creeLivre(evenement))
+                .peek(livre -> {
+                    livre.exemplaires.add(new ResumeExemplaire(evenement.getIdLecteur(), evenement.getTargetId().toString()));
+                    jongo.getCollection("vue_detailslivre").update("{_id:#}", livre.isbn).upsert().with(livre);
+                });
     }
 
 
-    private Future<Livre> creeLivre(ExemplaireAjouteEvenement evenement) {
+    private Option<Livre> creeLivre(ExemplaireAjouteEvenement evenement) {
         return catalogue.parIsbn(evenement.getIsbn())
                 .map(l -> l.getOrElse(DetailsLivre.LIVRE_VIDE))
-                .map(l -> new Livre(evenement.getIsbn(), l));
+                .map(l -> new Livre(evenement.getIsbn(), l)).toOption();
     }
 
     private final Jongo jongo;

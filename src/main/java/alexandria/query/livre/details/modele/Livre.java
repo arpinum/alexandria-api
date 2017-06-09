@@ -3,6 +3,7 @@ package alexandria.query.livre.details.modele;
 import catalogue.DetailsLivre;
 import com.google.common.collect.Lists;
 import org.jongo.marshall.jackson.oid.Id;
+import org.jongo.marshall.jackson.oid.MongoId;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Livre {
         this.image = detailsLivre.image;
     }
 
-    @Id
+    @MongoId
     public String isbn;
 
     public String titre;

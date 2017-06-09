@@ -1,15 +1,13 @@
 package alexandria.query.livre.details.synchronisation
 
-import alexandria.infrastructure.persistance.memoire.AvecEntrepotsMemoire
-import alexandria.modele.LocalisateurEntrepots
-import alexandria.modele.bibliotheque.Bibliotheque
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
-import alexandria.modele.lecteur.Lecteur
 import arpinum.query.WithJongo
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
+import com.google.common.util.concurrent.MoreExecutors
+import io.vavr.concurrent.Future
+import io.vavr.control.Option
 import org.junit.Rule
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class SurExemplaireAjouteTest extends Specification {
@@ -25,12 +23,11 @@ class SurExemplaireAjouteTest extends Specification {
         capteur = new SurExemplaireAjoute(jongo.jongo(), catalogue)
     }
 
-    @Ignore
     def "peut créer le détail du livre"() {
         given:
 
-        def evenement = new ExemplaireAjouteEvenement("id", "isbn")
-        catalogue.parIsbn("isbn") >> Optional.of(new DetailsLivre(titre: "titre", image: "image"))
+        def evenement = new ExemplaireAjouteEvenement("id", "lecteur", "isbn")
+        catalogue.parIsbn("isbn") >> Future.successful(MoreExecutors.newDirectExecutorService(), Option.of(new DetailsLivre(titre: "titre", image: "image")))
 
         when:
         capteur.execute(evenement)
@@ -42,8 +39,8 @@ class SurExemplaireAjouteTest extends Specification {
         record.titre == "titre"
         record.image == "image"
         record.exemplaires != null
-        record.exemplaires[0].emailLecteur == "id@id"
-        record.exemplaires[0].idBibliotheque == bibliotheque.id
+        record.exemplaires[0].emailLecteur == "lecteur"
+        record.exemplaires[0].idBibliotheque == "id"
         record.exemplaires[0].disponible
     }
 }
