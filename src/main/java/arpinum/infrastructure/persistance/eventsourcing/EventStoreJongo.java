@@ -26,6 +26,9 @@ public class EventStoreJongo implements EventStore {
 
     @Override
     public void save(Seq<Event<?>> events) {
+        if(events.isEmpty()) {
+            return;
+        }
         jongo.getCollection(collection).insert(events.toJavaArray());
     }
 

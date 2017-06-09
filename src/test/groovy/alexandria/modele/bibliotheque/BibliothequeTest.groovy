@@ -23,12 +23,24 @@ class BibliothequeTest extends Specification {
         event.idLecteur == "id"
     }
 
+    def "rejoue création"() {
+        given:
+        def bibliotheque = new Bibliotheque()
+
+        when:
+        bibliotheque.rejoue(new BibliothequeCréée("id", new Lecteur("lecteur")))
+
+        then:
+        bibliotheque.id == 'id'
+        bibliotheque.idLecteur() == 'lecteur'
+    }
+
     def "peut contenir un livre"() {
         given:
         def uneBibliotheque = uneBibliotheque()
 
         when:
-        def résultat = uneBibliotheque.ajouteExemplaire(new Lecteur("id"), "mon isbn")
+        def résultat = uneBibliotheque.ajouteExemplaire("mon isbn")
 
         then:
         def exemplaire = résultat._2()
@@ -45,8 +57,8 @@ class BibliothequeTest extends Specification {
     def "peut rechercher un exemplaire"() {
         given:
         def bibliotheque = uneBibliotheque()
-        bibliotheque.ajouteExemplaire(new Lecteur(""),"isbn")
-        bibliotheque.ajouteExemplaire(new Lecteur(""),"autre")
+        bibliotheque.ajouteExemplaire("isbn")
+        bibliotheque.ajouteExemplaire("autre")
 
         when:
         def exemplaireEventuel = bibliotheque.trouve("isbn")

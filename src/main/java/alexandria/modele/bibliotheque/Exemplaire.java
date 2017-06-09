@@ -18,6 +18,10 @@ public class Exemplaire {
     }
 
 
+    public IdentifiantExemplaire identifiant() {
+        return new IdentifiantExemplaire(identifiantBibliotheque, isbn);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,7 +38,7 @@ public class Exemplaire {
     public String identifiantBibliotheque() {
         return this.identifiantBibliotheque;
     }
-
     private String isbn;
+
     private String identifiantBibliotheque;
 }

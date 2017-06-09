@@ -2,6 +2,7 @@ package alexandria.modele.bibliotheque;
 
 import alexandria.modele.lecteur.Lecteur;
 import arpinum.ddd.BaseAggregate;
+import arpinum.ddd.event.EventSourceHandler;
 import com.google.common.base.MoreObjects;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -16,7 +17,7 @@ public class Bibliotheque extends BaseAggregate<String> {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    protected Bibliotheque() {
+    public Bibliotheque() {
 
     }
 
@@ -34,7 +35,7 @@ public class Bibliotheque extends BaseAggregate<String> {
         return MoreObjects.toStringHelper(getClass()).add("id", getId()).toString();
     }
 
-    public Tuple2<ExemplaireAjouteEvenement, Exemplaire> ajouteExemplaire(Lecteur lecteur, String isbn) {
+    public Tuple2<ExemplaireAjouteEvenement, Exemplaire> ajouteExemplaire(String isbn) {
         final Exemplaire exemplaire = new Exemplaire(isbn, this.getId());
         exemplaires = exemplaires.append(exemplaire);
         return Tuple.of(nouvelExemplaire(isbn), exemplaire);
@@ -55,6 +56,12 @@ public class Bibliotheque extends BaseAggregate<String> {
     private String idLecteur;
 
     private List<Exemplaire> exemplaires = List.empty();
+
+    @EventSourceHandler
+    public void rejoue(BibliothequeCréée évènement) {
+        setId(évènement.getTargetId().toString());
+        idLecteur = évènement.idLecteur();
+    }
 
     public static class Fabrique {
 
