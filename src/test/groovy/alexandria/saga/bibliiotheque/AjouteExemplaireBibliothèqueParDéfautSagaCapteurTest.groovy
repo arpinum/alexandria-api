@@ -20,14 +20,14 @@ class AjouteExemplaireBibliothèqueParDéfautSagaCapteurTest extends Specificati
 
     def "récupère le lecteur, crée la bibliothèque, et ajoute l'exemplaire"() {
         given:
-        def lecteur = new Lecteur('id')
-        registre.trouve('id') >> Future.successful(lecteur)
-        bus.send(_ as CreeBibliothequeParDéfautCommande) >> Future.successful('id')
-        def résultat = new IdentifiantExemplaire('id', 'isbn')
+        def lecteur = new Lecteur('getId')
+        registre.trouve('getId') >> Future.successful(lecteur)
+        bus.send(_ as CreeBibliothequeParDéfautCommande) >> Future.successful('getId')
+        def résultat = new IdentifiantExemplaire('getId', 'isbn')
         bus.send(_ as AjoutExemplaireCommande) >> Future.successful(résultat)
 
         when:
-        def future = capteur.run(bus, new AjouteExemplaireBibliothèqueParDéfautSaga(idLecteur: 'id', isbn: 'isbn'))
+        def future = capteur.run(bus, new AjouteExemplaireBibliothèqueParDéfautSaga(idLecteur: 'getId', isbn: 'isbn'))
 
         then:
         future.get() == résultat

@@ -7,8 +7,8 @@ class UtilisateurTest extends Specification {
 
     def "calcule un id stable"(def email1, def email2, def equals) {
         given:
-        def premier = new Utilisateur(email1)
-        def second = new Utilisateur(email2)
+        def premier = Utilisateur.crée(email1, '', '')
+        def second = Utilisateur.crée(email2, '', '')
 
         when:
         def idEquals = premier.id == second.id

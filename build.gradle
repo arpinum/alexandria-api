@@ -41,7 +41,8 @@ dependencies {
     compile "org.jboss.resteasy:resteasy-undertow:$restEasyVersion"
     compile "org.jboss.resteasy:resteasy-jackson2-provider:$restEasyVersion"
     compile 'org.cfg4j:cfg4j-core:4.4.0'
-
+    compile 'org.pac4j:pac4j-jwt:2.0.0'
+    compile 'org.pac4j:jax-rs-pac4j:2.0.0'
 
     compile 'ch.qos.logback:logback-classic:1.1.6'
 

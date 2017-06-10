@@ -32,7 +32,7 @@ public class Bibliotheque extends BaseAggregate<String> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("id", getId()).toString();
+        return MoreObjects.toStringHelper(getClass()).add("getId", getId()).toString();
     }
 
     public Tuple2<ExemplaireAjouteEvenement, Exemplaire> ajouteExemplaire(String isbn) {

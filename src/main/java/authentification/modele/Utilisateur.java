@@ -1,18 +1,38 @@
 package authentification.modele;
 
 
-import com.google.common.base.Charsets;
-import com.google.common.hash.Hashing;
+import org.jongo.marshall.jackson.oid.MongoId;
 
 public class Utilisateur {
 
-    public Utilisateur(String email) {
-        id = Hashing.murmur3_32().hashString(email, Charsets.UTF_8).toString();
+    public static Utilisateur crée(String email, String prénom, String nom) {
+        Utilisateur résultat = new Utilisateur();
+        résultat.id = IdUtilisateur.depuisEmail(email);
+        résultat.prénom = prénom;
+        résultat.nom = nom;
+        résultat.email = email;
+        return résultat;
     }
 
-    public String id() {
+    public String getId() {
         return id;
     }
 
-    private final String id;
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrénom() {
+        return prénom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    @MongoId
+    private String id;
+    private String nom;
+    private String prénom;
+    private String email;
 }

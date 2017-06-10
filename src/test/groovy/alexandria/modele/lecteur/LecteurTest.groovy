@@ -11,10 +11,10 @@ class LecteurTest extends Specification {
 
     def "peut créer avec email"() {
         given:
-        def lecteur = new Lecteur("id@id")
+        def lecteur = new Lecteur("getId@getId")
 
         expect:
-        lecteur.id == "id@id"
+        lecteur.id == "getId@getId"
     }
 
 }

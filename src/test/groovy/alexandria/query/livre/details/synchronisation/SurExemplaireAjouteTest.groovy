@@ -26,7 +26,7 @@ class SurExemplaireAjouteTest extends Specification {
     def "peut créer le détail du livre"() {
         given:
 
-        def evenement = new ExemplaireAjouteEvenement("id", "lecteur", "isbn")
+        def evenement = new ExemplaireAjouteEvenement("getId", "lecteur", "isbn")
         catalogue.parIsbn("isbn") >> Future.successful(MoreExecutors.newDirectExecutorService(), Option.of(new DetailsLivre(titre: "titre", image: "image")))
 
         when:
@@ -40,7 +40,7 @@ class SurExemplaireAjouteTest extends Specification {
         record.image == "image"
         record.exemplaires != null
         record.exemplaires[0].emailLecteur == "lecteur"
-        record.exemplaires[0].idBibliotheque == "id"
+        record.exemplaires[0].idBibliotheque == "getId"
         record.exemplaires[0].disponible
     }
 }

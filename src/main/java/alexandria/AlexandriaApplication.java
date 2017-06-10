@@ -5,11 +5,13 @@ import arpinum.configuration.JacksonConfiguration;
 import arpinum.infrastructure.bus.guice.ScanMagique;
 import com.google.inject.Injector;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@ApplicationPath("/alexandria")
 public class AlexandriaApplication extends Application {
 
     public AlexandriaApplication(Injector parentInjector) {

@@ -7,7 +7,7 @@ class BibliothequeTest extends Specification {
 
     def "peut créer une bibliothèque pour un lecteur"() {
         given:
-        def lecteur = new Lecteur("id")
+        def lecteur = new Lecteur("getId")
 
         when:
         def résultat = Bibliotheque.fabrique().pour(lecteur)
@@ -15,12 +15,12 @@ class BibliothequeTest extends Specification {
         then:
         résultat != null
         def bibliotheque = résultat._2
-        bibliotheque.idLecteur() == "id"
+        bibliotheque.idLecteur() == "getId"
         bibliotheque.getId() != null
         def event = résultat._1
         event != null
         event.targetId == bibliotheque.id
-        event.idLecteur == "id"
+        event.idLecteur == "getId"
     }
 
     def "rejoue création"() {
@@ -28,10 +28,10 @@ class BibliothequeTest extends Specification {
         def bibliotheque = new Bibliotheque()
 
         when:
-        bibliotheque.rejoue(new BibliothequeCréée("id", new Lecteur("lecteur")))
+        bibliotheque.rejoue(new BibliothequeCréée("getId", new Lecteur("lecteur")))
 
         then:
-        bibliotheque.id == 'id'
+        bibliotheque.id == 'getId'
         bibliotheque.idLecteur() == 'lecteur'
     }
 
@@ -71,6 +71,6 @@ class BibliothequeTest extends Specification {
     }
 
     Bibliotheque uneBibliotheque() {
-        return new Bibliotheque("id", new Lecteur(""));
+        return new Bibliotheque("getId", new Lecteur(""));
     }
 }

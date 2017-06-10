@@ -35,7 +35,7 @@ public abstract class BaseEntity<TId> implements Entity<TId> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("id", id).toString();
+        return MoreObjects.toStringHelper(getClass()).add("getId", id).toString();
     }
 
     private TId id;

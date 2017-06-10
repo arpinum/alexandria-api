@@ -26,7 +26,7 @@ class EventStoreJongoTest extends Specification {
 
     def "can persist"() {
         given:
-        def entity = new FakeEntity(id: "id")
+        def entity = new FakeEntity(id: "getId")
         def event = new FakeEvent(entity, "stuff")
 
         when:
@@ -35,7 +35,7 @@ class EventStoreJongoTest extends Specification {
         then:
         def record = jongo.collection("fake_eventstore").findOne()
         record != null
-        record.targetId == "id"
+        record.targetId == "getId"
         record.targetType == "FakeEntity"
         record.timestamp != null
         record.someData == "stuff"
@@ -44,7 +44,7 @@ class EventStoreJongoTest extends Specification {
 
     def "can load"() {
         given:
-        jongo.collection('fake_eventstore') << [targetId    : "id"
+        jongo.collection('fake_eventstore') << [targetId    : "getId"
                                                 , targetType: "FakeEntity"
                                                 , timestamp : Instant.EPOCH.toEpochMilli()
                                                 , someData  : "data"
@@ -59,13 +59,13 @@ class EventStoreJongoTest extends Specification {
         def event = events[0] as FakeEvent
         event.someData == "data"
         event.timestamp == 0
-        event.targetId == "id"
+        event.targetId == "getId"
         event.targetType == "FakeEntity"
     }
 
     def "can load given event type"() {
         given:
-        jongo.collection('fake_eventstore') << [targetId    : "id"
+        jongo.collection('fake_eventstore') << [targetId    : "getId"
                                                 , targetType: "FakeEntity"
                                                 , timestamp : Instant.EPOCH.toEpochMilli()
                                                 , someData  : "data"
@@ -81,23 +81,23 @@ class EventStoreJongoTest extends Specification {
 
     def "mark as deleted"() {
         given:
-        jongo.collection('fake_eventstore') << [targetId    : "id"
+        jongo.collection('fake_eventstore') << [targetId    : "getId"
                                                 , targetType: "FakeEntity"
                                                 , timestamp : Instant.EPOCH.toEpochMilli()
                                                 , someData  : "data"
                                                 , _class    : 'arpinum.infrastructure.EventStoreJongoTest$FakeEvent']
 
         when:
-        store.markAllAsDeleted("id", FakeEntity.class)
+        store.markAllAsDeleted("getId", FakeEntity.class)
 
         then:
-        def record = jongo.collection('fake_eventstore').findOne([targetId: "id"])
+        def record = jongo.collection('fake_eventstore').findOne([targetId: "getId"])
         record._deleted == true
     }
 
     def "do not load delete events"() {
         given:
-        jongo.collection('fake_eventstore') << [targetId    : "id"
+        jongo.collection('fake_eventstore') << [targetId    : "getId"
                                                 , targetType: "FakeEntity"
                                                 , timestamp : Instant.EPOCH.toEpochMilli()
                                                 , someData  : "data"
@@ -114,13 +114,13 @@ class EventStoreJongoTest extends Specification {
 
     def "loads ordered by timestamp"() {
         given:
-        def first = new FakeEvent(new FakeEntity(id: "id"), "dataFirst")
+        def first = new FakeEvent(new FakeEntity(id: "getId"), "dataFirst")
         store.save(List.of(first))
-        def second = new FakeEvent(new FakeEntity(id: "id"), "dataSecond")
+        def second = new FakeEvent(new FakeEntity(id: "getId"), "dataSecond")
         store.save(List.of(second))
 
         when:
-        def events = store.allOf("id", FakeEntity.class).consume({it.toJavaList()})
+        def events = store.allOf("getId", FakeEntity.class).consume({it.toJavaList()})
 
         then:
         events[0].someData == "dataFirst"

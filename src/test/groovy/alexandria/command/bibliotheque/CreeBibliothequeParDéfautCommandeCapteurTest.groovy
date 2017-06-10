@@ -20,7 +20,7 @@ class CreeBibliothequeParDéfautCommandeCapteurTest extends Specification {
 
     def "crée la bibliothèque pour le lecteur"() {
         given:
-        def commande = new CreeBibliothequeParDéfautCommande(new Lecteur("id"))
+        def commande = new CreeBibliothequeParDéfautCommande(new Lecteur("getId"))
 
         when:
         def résultat = handler.execute(commande)
@@ -28,20 +28,20 @@ class CreeBibliothequeParDéfautCommandeCapteurTest extends Specification {
         then:
         résultat != null
         résultat._2.get(0) instanceof BibliothequeCréée
-        résultat._1 == "id"
+        résultat._1 == "getId"
     }
 
     def "ne crée pas la bibliothèque si elle existe"() {
         given:
-        def lecteur = new Lecteur("id")
-        def bibliotheque = new Bibliotheque("id", lecteur)
+        def lecteur = new Lecteur("getId")
+        def bibliotheque = new Bibliotheque("getId", lecteur)
         LocalisateurEntrepots.bibliotheques().add(bibliotheque)
 
         when:
         def résultat = handler.execute(new CreeBibliothequeParDéfautCommande(lecteur))
 
         then:
-        résultat._1 == "id"
+        résultat._1 == "getId"
         résultat._2.isEmpty()
     }
 }
