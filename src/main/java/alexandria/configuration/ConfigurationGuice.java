@@ -32,17 +32,23 @@ public class ConfigurationGuice extends AbstractModule {
         install(new CqrsModule("alexandria"));
         bind(LocalisateurEntrepots.class).to(LocalisateurEntrepotsEventSource.class).in(Singleton.class);
         requestStaticInjection(LocalisateurEntrepots.class);
-        bind(RegistreLecteurs.class).toInstance(new RegistreLecteurs() {
+
+    }
+
+    @Provides
+    @Singleton
+    public RegistreLecteurs registreLecteurse(@Io ExecutorService service) {
+        return new RegistreLecteurs() {
             @Override
             public Future<Lecteur> trouve(String id) {
-                return Future.successful(new Lecteur(id));
+                return Future.successful(service, new Lecteur(id));
             }
 
             @Override
             public Future<FicheLecteur> ficheDe(String id) {
-                return Future.successful(new FicheLecteur("Doe", "John"));
+                return Future.successful(service, new FicheLecteur("Doe", "John"));
             }
-        });
+        };
     }
 
     @Provides
