@@ -19,7 +19,8 @@ public class Main {
                 , new ExecutorModule()
                 , new Cfg4jModule("app.yaml")
                 , new MongoDbModule()
-                , new JongoModule());
+                , new JongoModule()
+                , new JwtModule());
         server.deploy(new AlexandriaApplication(parentInjector));
         server.deploy(new AuthentificationApplication(parentInjector));
         Undertow.Builder serverConfiguration = Undertow.builder()

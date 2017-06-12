@@ -1,7 +1,8 @@
 package alexandria.web.ressource.bibliotheque
 
-import alexandria.command.bibliotheque.AjoutExemplaireCommande
+import alexandria.saga.bibliiotheque.AjouteExemplaireBibliothèqueParDéfautSaga
 import arpinum.command.CommandBus
+import arpinum.web.SecurityContextBuilder
 import io.vavr.concurrent.Future
 import spock.lang.Specification
 
@@ -16,11 +17,11 @@ class ExemplairesLecteurRessourceTest extends Specification {
         def ressource = new ExemplairesLecteurRessource(bus)
         def response = Mock(AsyncResponse)
         when:
-        ressource.ajoute(response, "monmail", "iiiiisbn")
+        ressource.ajoute(response, SecurityContextBuilder.forId("id"), new AjouteExemplaireBibliothèqueParDéfautSaga(isbn:"iiiiisbn"))
 
         then:
         1 * bus.send({
-            it.idBibliotheque == "monmail" && it.isbn == "iiiiisbn"
-        }) >> Future.successful(UUID.randomUUID())
+            it.isbn == "iiiiisbn" && it.idLecteur == 'id'
+        } as AjouteExemplaireBibliothèqueParDéfautSaga) >> Future.successful(UUID.randomUUID())
     }
 }

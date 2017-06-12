@@ -4,6 +4,9 @@ import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
 import arpinum.query.WithJongo
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
+import com.google.common.util.concurrent.MoreExecutors
+import io.vavr.concurrent.Future
+import io.vavr.control.Option
 import org.junit.Rule
 import spock.lang.Specification
 
@@ -15,13 +18,13 @@ class SurExemplaireAjouteTest extends Specification {
     def catalogue = Mock(CatalogueLivre)
 
     def "créer un livre s'il n'existe pas"() {
-        given: "Attendu un evénement d'ajout d'exemplaire"
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement( UUID.randomUUID().toString(), "mon isbn")
+        given:
+        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
 
-        when: "Nous invoquons la méthode execute du souscripteur d'événement"
+        when:
         capteur().execute(exemplaireAjouteEvenement)
 
-        then: "Nous vérifions que le livre a été ajouté"
+        then:
         def resume = jongo.collection("vue_resumelivre").findOne()
         resume != null
         resume._id == "mon isbn"
@@ -32,7 +35,7 @@ class SurExemplaireAjouteTest extends Specification {
     def "ajoute un exemplaire à un livre existant"() {
         given:
         jongo.collection("vue_resumelivre") << [_id: "mon isbn", titre: "Harry Potter", nombre: 2]
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement( UUID.randomUUID().toString(), "mon isbn")
+        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
 
         when:
         capteur().execute(exemplaireAjouteEvenement)
@@ -46,19 +49,23 @@ class SurExemplaireAjouteTest extends Specification {
 
     def "peut récupérer le titre du livre"() {
         given:
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement( UUID.randomUUID().toString(), "mon isbn")
-        catalogue.parIsbn(_) >> Optional.of(new DetailsLivre(titre: "Harry Potter"))
+        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
+        catalogueRetourne(new DetailsLivre(titre: "Harry Potter"))
 
         when:
         capteur().execute(exemplaireAjouteEvenement)
 
-        then: "Nous vérifions que le livre a été ajouté"
+        then:
         def resume = jongo.collection("vue_resumelivre").findOne()
         resume.titre == "Harry Potter"
     }
 
     private capteur() {
-        catalogue.parIsbn(_) >> Optional.of(new DetailsLivre())
+        catalogueRetourne(new DetailsLivre())
         new SurExemplaireAjoute(jongo.jongo(), catalogue)
+    }
+
+    private void catalogueRetourne(DetailsLivre détails) {
+        catalogue.parIsbn(_) >> Future.successful(MoreExecutors.newDirectExecutorService(), Option.of(détails))
     }
 }

@@ -2,7 +2,7 @@ package catalogue.googlebooks
 
 import com.google.common.util.concurrent.MoreExecutors
 import okhttp3.OkHttpClient
-import org.junit.Ignore
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class CatalogueLivreGoogleTest extends Specification {
