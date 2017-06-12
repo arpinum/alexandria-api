@@ -17,9 +17,12 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import io.vavr.concurrent.Future;
-import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import org.cfg4j.provider.ConfigurationProvider;
+import org.pac4j.core.config.Config;
+import org.pac4j.http.client.direct.HeaderClient;
+import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
+import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
 
 import java.util.concurrent.ExecutorService;
 
@@ -62,6 +65,14 @@ public class ConfigurationGuice extends AbstractModule {
     public OkHttpClient client() {
         return new OkHttpClient.Builder()
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    public Config config(ConfigurationProvider provider) {
+        JwtAuthenticator tokenAuthenticator = new JwtAuthenticator(new SecretSignatureConfiguration(provider.getProperty("jwt.secret", String.class)));
+        HeaderClient headerClient = new HeaderClient("Authorization", "Bearer", tokenAuthenticator);
+        return new Config(headerClient);
     }
 
 }

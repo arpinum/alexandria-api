@@ -2,6 +2,9 @@ package alexandria.web.ressource.bibliotheque;
 
 import alexandria.saga.bibliiotheque.AjouteExemplaireBibliothèqueParDéfautSaga;
 import arpinum.command.CommandBus;
+import org.pac4j.jax.rs.annotations.Pac4JProfile;
+import org.pac4j.jax.rs.annotations.Pac4JSecurity;
+import org.pac4j.jwt.profile.JwtProfile;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
@@ -15,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.concurrent.ExecutionException;
 
 @Path("/ma/bibliotheque/exemplaires")
+@Pac4JSecurity
 public class ExemplairesLecteurRessource {
 
     @Inject

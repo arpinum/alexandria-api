@@ -3,6 +3,7 @@ package bin;
 
 import alexandria.AlexandriaApplication;
 import arpinum.configuration.*;
+import authentification.AuthentificationApplication;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -20,6 +21,7 @@ public class Main {
                 , new MongoDbModule()
                 , new JongoModule());
         server.deploy(new AlexandriaApplication(parentInjector));
+        server.deploy(new AuthentificationApplication(parentInjector));
         Undertow.Builder serverConfiguration = Undertow.builder()
                 .addHttpListener(8080, "localhost");
         server.start(serverConfiguration);

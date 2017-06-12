@@ -1,2 +1,4 @@
 mongodb:
   uri: "mongodb://localhost:27017/alexandria"
+jwt:
+  secret: "5RPD9z_uF4Nrg1qAlJU6D1TdpF-Z6N18iHJdiOICTsAROz40CasyCbXP2x5EIKAlFzDPh4NDHEPZxewdNSouTeuWstK_igwQWiH2ONPonpoR8RDcP3pQFJKHrx4lFIZ56BybC_V-35ConGy-SEa3Ck-o-7hgsnF3FDIvVEEv57EKQrKbdZi4OEsCpP2lN22zoV4NPylJ0b1Fne9ti4Vzj1jHL0LPGEPfZQGwpXevriyAzBUMOUwKhDr2yGVm4Oz2u5laMvTXtyZlhv14lKEiS7JWzrPxOSrxtoxQlnR807h7QIdPkcEbg_9J3yBu_vxUrSpdsGG6KsIrkATlVerx1w"

@@ -1,9 +1,13 @@
 package alexandria;
 
 import alexandria.configuration.ConfigurationGuice;
+import alexandria.infrastructure.identite.Pac4jProvider;
 import arpinum.configuration.JacksonConfiguration;
 import arpinum.infrastructure.bus.guice.ScanMagique;
 import com.google.inject.Injector;
+import org.pac4j.core.config.Config;
+import org.pac4j.jax.rs.features.Pac4JSecurityFeature;
+import org.pac4j.jax.rs.servlet.features.ServletJaxRsContextFactoryProvider;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
@@ -24,6 +28,8 @@ public class AlexandriaApplication extends Application {
                 .stream().map(injector::getInstance)
                 .collect(Collectors.toSet());
         instances.add(new JacksonConfiguration());
+        instances.add(injector.getInstance(Pac4jProvider.class));
+
         return instances;
     }
 
