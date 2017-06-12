@@ -28,7 +28,7 @@ public class RegistreLecteursDirect implements RegistreLecteurs {
 
     @Override
     public Future<FicheLecteur> ficheDe(String id) {
-        return trouveEtMap(id, utilisateur -> new FicheLecteur(utilisateur.getPrénom(), utilisateur.getNom()));
+        return trouveEtMap(id, utilisateur -> new FicheLecteur(id, utilisateur.getPrénom(), utilisateur.getNom()));
     }
 
     private <T> Future<T> trouveEtMap(String id, Function<Utilisateur, T> mapper) {

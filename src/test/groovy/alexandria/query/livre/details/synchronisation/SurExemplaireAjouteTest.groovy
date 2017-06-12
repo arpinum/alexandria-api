@@ -1,6 +1,8 @@
 package alexandria.query.livre.details.synchronisation
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
+import alexandria.modele.lecteur.FicheLecteur
+import alexandria.modele.lecteur.RegistreLecteurs
 import arpinum.query.WithJongo
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
@@ -17,10 +19,12 @@ class SurExemplaireAjouteTest extends Specification {
 
     def catalogue = Mock(CatalogueLivre)
 
+    def registre = Mock(RegistreLecteurs)
+
     SurExemplaireAjoute capteur
 
     void setup() {
-        capteur = new SurExemplaireAjoute(jongo.jongo(), catalogue)
+        capteur = new SurExemplaireAjoute(jongo.jongo(), catalogue, registre)
     }
 
     def "peut créer le détail du livre"() {
@@ -28,6 +32,7 @@ class SurExemplaireAjouteTest extends Specification {
 
         def evenement = new ExemplaireAjouteEvenement("getId", "lecteur", "isbn")
         catalogue.parIsbn("isbn") >> Future.successful(MoreExecutors.newDirectExecutorService(), Option.of(new DetailsLivre(titre: "titre", image: "image")))
+        registre.ficheDe('lecteur') >> Future.successful(MoreExecutors.newDirectExecutorService(), new FicheLecteur('id', 'dusse', 'jb'))
 
         when:
         capteur.execute(evenement)
@@ -39,7 +44,11 @@ class SurExemplaireAjouteTest extends Specification {
         record.titre == "titre"
         record.image == "image"
         record.exemplaires != null
-        record.exemplaires[0].emailLecteur == "lecteur"
+        with(record.exemplaires[0].lecteur) {
+            it.id == 'id'
+            it.prénom == 'jb'
+            it.nom == 'dusse'
+        }
         record.exemplaires[0].idBibliotheque == "getId"
         record.exemplaires[0].disponible
     }

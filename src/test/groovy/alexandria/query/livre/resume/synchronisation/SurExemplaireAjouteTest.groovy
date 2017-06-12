@@ -1,6 +1,7 @@
 package alexandria.query.livre.resume.synchronisation
 
 import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
+import alexandria.modele.lecteur.RegistreLecteurs
 import arpinum.query.WithJongo
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre

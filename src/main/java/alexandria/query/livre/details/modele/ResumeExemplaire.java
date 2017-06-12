@@ -1,6 +1,7 @@
 package alexandria.query.livre.details.modele;
 
-import alexandria.modele.bibliotheque.Bibliotheque;
+import alexandria.modele.lecteur.FicheLecteur;
+import alexandria.modele.lecteur.Lecteur;
 
 public class ResumeExemplaire {
 
@@ -8,12 +9,12 @@ public class ResumeExemplaire {
     public ResumeExemplaire() {
     }
 
-    public ResumeExemplaire(String idLecteur, String idBibliotheque) {
-        this.emailLecteur = idLecteur;
+    public ResumeExemplaire(FicheLecteur lecteur, String idBibliotheque) {
+        this.lecteur = lecteur;
         this.idBibliotheque = idBibliotheque;
     }
 
-    public String emailLecteur;
+    public FicheLecteur lecteur;
     public String idBibliotheque;
     public boolean disponible = true;
 }

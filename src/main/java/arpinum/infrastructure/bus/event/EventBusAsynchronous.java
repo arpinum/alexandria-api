@@ -44,7 +44,7 @@ public class EventBusAsynchronous implements EventBus {
     private final List<EventCaptor> captors;
     private final Chain middlewareChain;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CommandBusAsynchronous.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EventBusAsynchronous.class);
 
     private static class Chain {
 

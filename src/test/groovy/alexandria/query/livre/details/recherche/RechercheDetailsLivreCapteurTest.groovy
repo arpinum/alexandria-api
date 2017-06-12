@@ -22,6 +22,6 @@ class RechercheDetailsLivreCapteurTest extends Specification {
         livre.titre == "titre"
         livre.image == "image"
         livre.exemplaires.size() == 1
-        livre.exemplaires[0].emailLecteur == "body"
+        livre.exemplaires[0].lecteur == "body"
     }
 }
