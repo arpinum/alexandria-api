@@ -74,6 +74,6 @@ shadowJar {
     version = null
 }
 
-mainClassName = 'bin.Main'
+mainClassName = 'Main'
 
 

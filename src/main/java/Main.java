@@ -1,6 +1,3 @@
-package bin;
-
-
 import alexandria.AlexandriaApplication;
 import arpinum.configuration.*;
 import authentification.AuthentificationApplication;
@@ -21,8 +18,9 @@ public class Main {
                 , new MongoDbModule()
                 , new JongoModule()
                 , new JwtModule());
-        server.deploy(new AlexandriaApplication(parentInjector));
-        server.deploy(new AuthentificationApplication(parentInjector));
+        AuthentificationApplication authentificationApplication = new AuthentificationApplication(parentInjector);
+        server.deploy(authentificationApplication);
+        server.deploy(new AlexandriaApplication(parentInjector, authentificationApplication));
         Undertow.Builder serverConfiguration = Undertow.builder()
                 .addHttpListener(8080, "localhost");
         server.start(serverConfiguration);

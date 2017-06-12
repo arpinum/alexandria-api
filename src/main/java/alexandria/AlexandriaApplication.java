@@ -1,9 +1,10 @@
 package alexandria;
 
-import alexandria.configuration.ConfigurationGuice;
+import alexandria.configuration.AlexandriaConfiguration;
 import arpinum.configuration.JacksonConfiguration;
 import arpinum.infrastructure.security.JwtFilter;
 import arpinum.infrastructure.bus.guice.ScanMagique;
+import authentification.AuthentificationApplication;
 import com.google.inject.Injector;
 
 import javax.ws.rs.ApplicationPath;
@@ -15,8 +16,8 @@ import java.util.stream.Collectors;
 @ApplicationPath("/alexandria")
 public class AlexandriaApplication extends Application {
 
-    public AlexandriaApplication(Injector parentInjector) {
-        injector = parentInjector.createChildInjector(new ConfigurationGuice());
+    public AlexandriaApplication(Injector parentInjector, AuthentificationApplication authentificationApplication) {
+        injector = parentInjector.createChildInjector(new AlexandriaConfiguration(authentificationApplication));
     }
 
     @Override

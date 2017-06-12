@@ -31,6 +31,10 @@ public class UtilisateurService {
         return Option.of(utilisateur);
     }
 
+    public Option<Utilisateur> trouve(String id) {
+        return utilisateurDao.parId(id);
+    }
+
     private UtilisateurDao utilisateurDao;
     private JwtBuilder jwtBuilder;
 }

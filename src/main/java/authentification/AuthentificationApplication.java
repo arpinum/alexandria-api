@@ -1,6 +1,7 @@
 package authentification;
 
 import arpinum.infrastructure.bus.guice.ScanMagique;
+import authentification.application.UtilisateurService;
 import authentification.configuration.ConfigurationGuice;
 import com.google.inject.Injector;
 
@@ -23,6 +24,10 @@ public class AuthentificationApplication extends Application {
                 .stream().map(injector::getInstance)
                 .collect(Collectors.toSet());
         return instances;
+    }
+
+    public UtilisateurService utilisateurService() {
+        return injector.getInstance(UtilisateurService.class);
     }
 
     private final Injector injector;
