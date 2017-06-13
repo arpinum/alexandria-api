@@ -4,6 +4,7 @@ import arpinum.infrastructure.bus.guice.ScanMagique;
 import authentification.application.UtilisateurService;
 import authentification.configuration.ConfigurationGuice;
 import com.google.inject.Injector;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
@@ -23,6 +24,9 @@ public class AuthentificationApplication extends Application {
         Set<Object> instances = ScanMagique.searchForAnnotatedClass("authentification.web", Path.class)
                 .stream().map(injector::getInstance)
                 .collect(Collectors.toSet());
+        CorsFilter corsFilter = new CorsFilter();
+        corsFilter.getAllowedOrigins().add("*");
+        instances.add(corsFilter);
         return instances;
     }
 
