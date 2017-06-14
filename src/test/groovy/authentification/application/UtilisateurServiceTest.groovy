@@ -24,6 +24,6 @@ class UtilisateurServiceTest extends Specification {
 
         then:
         token == 'token'
-        1 * builder.build(utilisateur.id, HashMap.of('firstName', 'jb', 'lastName', 'dusse')) >> 'token'
+        1 * builder.build(utilisateur.id, HashMap.of('prenom', 'jb', 'nom', 'dusse')) >> 'token'
     }
 }

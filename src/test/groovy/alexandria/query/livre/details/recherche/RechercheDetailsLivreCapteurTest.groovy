@@ -11,7 +11,7 @@ class RechercheDetailsLivreCapteurTest extends Specification {
 
     def "peut retourner un livre"() {
         given:
-        jongo.collection("vue_detailslivre") << [_id: "isbn", titre: "titre", image: "image", exemplaires: [[emailLecteur: "body"]]]
+        jongo.collection("vue_detailslivre") << [_id: "isbn", titre: "titre", image: "image", exemplaires: [[lecteur: [nom:'jb']]]]
         def capteur = new RechercheDetailsLivreCapteur()
 
         when:
@@ -22,6 +22,6 @@ class RechercheDetailsLivreCapteurTest extends Specification {
         livre.titre == "titre"
         livre.image == "image"
         livre.exemplaires.size() == 1
-        livre.exemplaires[0].lecteur == "body"
+        livre.exemplaires[0].lecteur.nom == "jb"
     }
 }

@@ -21,7 +21,7 @@ public class UtilisateurService {
     public String authentifie(String email, String prénom, String nom) {
         return utilisateurDao.parId(IdUtilisateur.depuisEmail(email))
                 .orElse(() -> crée(email, prénom, nom))
-                .map(u -> jwtBuilder.build(u.getId(), HashMap.of("firstName", u.getPrénom(), "lastName", u.getNom())))
+                .map(u -> jwtBuilder.build(u.getId(), HashMap.of("prenom", u.getPrénom(), "nom", u.getNom())))
                 .get();
     }
 
