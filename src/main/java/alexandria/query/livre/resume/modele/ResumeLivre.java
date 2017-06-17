@@ -1,6 +1,6 @@
 package alexandria.query.livre.resume.modele;
 
-import org.jongo.marshall.jackson.oid.Id;
+import org.jongo.marshall.jackson.oid.MongoId;
 
 
 public class ResumeLivre {
@@ -14,7 +14,7 @@ public class ResumeLivre {
         this.nombre = 1;
     }
 
-    @Id
+    @MongoId
     public String isbn;
     public String titre;
     public int nombre;

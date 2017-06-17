@@ -2,7 +2,6 @@ package alexandria.query.livre.details.modele;
 
 import catalogue.DetailsLivre;
 import com.google.common.collect.Lists;
-import org.jongo.marshall.jackson.oid.Id;
 import org.jongo.marshall.jackson.oid.MongoId;
 
 import java.util.List;
@@ -26,5 +25,5 @@ public class Livre {
 
     public String image;
 
-    public List<ResumeExemplaire> exemplaires =Lists.newArrayList();
+    public List<ResumeExemplaire> exemplaires = Lists.newArrayList();
 }
