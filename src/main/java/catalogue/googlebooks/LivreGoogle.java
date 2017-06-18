@@ -13,7 +13,7 @@ public class LivreGoogle {
         final DetailsLivre résultat = new DetailsLivre();
         résultat.titre = volumeInfo.title;
         résultat.isbn = isbn();
-        résultat.image = Optional.ofNullable(volumeInfo.imageLinks).orElse(new ImagesGoogle()).thumbnail;
+        résultat.image = Optional.ofNullable(volumeInfo.imageLinks).orElse(new ImagesGoogle()).thumbnail.replace("zoom=1","zoom=2");
         résultat.description = volumeInfo.description;
         return résultat;
     }
