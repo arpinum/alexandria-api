@@ -29,5 +29,5 @@ public class Livre {
 
     public String description;
 
-    int nombre = 1;
+    public int nombre = 1;
 }
