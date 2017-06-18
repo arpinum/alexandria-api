@@ -1,5 +1,6 @@
-package alexandria.query.livre.details.modele;
+package alexandria.query.livre.resume.modele;
 
+import alexandria.query.livre.details.modele.ResumeExemplaire;
 import catalogue.DetailsLivre;
 import com.google.common.collect.Lists;
 import org.jongo.marshall.jackson.oid.MongoId;
@@ -15,6 +16,7 @@ public class Livre {
     public Livre(String isbn, DetailsLivre detailsLivre) {
         this.isbn = isbn;
         this.titre = detailsLivre.titre;
+        this.description = detailsLivre.description;
         this.image = detailsLivre.image;
     }
 
@@ -25,6 +27,7 @@ public class Livre {
 
     public String image;
 
-    public List<ResumeExemplaire> exemplaires = Lists.newArrayList();
+    public String description;
 
+    int nombre = 1;
 }

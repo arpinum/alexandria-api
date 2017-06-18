@@ -1,6 +1,6 @@
 package alexandria.web.ressource.livre
 
-import alexandria.query.livre.resume.modele.ResumeLivre
+import alexandria.query.livre.resume.modele.Livre
 import arpinum.query.QueryBus
 import io.vavr.concurrent.Future
 import spock.lang.Specification
@@ -18,7 +18,7 @@ class LivresRessourceTest extends Specification {
 
     def "retourne bien tous les livres"() {
         given:
-        def livres = [new ResumeLivre()]
+        def livres = [new Livre()]
         bus.send(_) >> Future.successful(livres)
         def response = Mock(AsyncResponse)
 

@@ -9,6 +9,6 @@ public class VolumeGoogle {
 
     public String title;
     public List<Identifieur> industryIdentifiers;
+    public String description;
     public ImagesGoogle imageLinks;
-
 }

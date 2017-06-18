@@ -21,6 +21,7 @@ class SurExemplaireAjouteTest extends Specification {
     def "créer un livre s'il n'existe pas"() {
         given:
         def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
+        catalogueRetourne(new DetailsLivre())
 
         when:
         capteur().execute(exemplaireAjouteEvenement)

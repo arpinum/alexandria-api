@@ -14,6 +14,7 @@ public class LivreGoogle {
         résultat.titre = volumeInfo.title;
         résultat.isbn = isbn();
         résultat.image = Optional.ofNullable(volumeInfo.imageLinks).orElse(new ImagesGoogle()).thumbnail;
+        résultat.description = volumeInfo.description;
         return résultat;
     }
 
