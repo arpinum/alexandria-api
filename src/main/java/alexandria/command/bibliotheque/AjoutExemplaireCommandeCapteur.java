@@ -2,9 +2,9 @@ package alexandria.command.bibliotheque;
 
 import alexandria.modele.LocalisateurEntrepots;
 import alexandria.modele.bibliotheque.Bibliotheque;
-import alexandria.modele.bibliotheque.Exemplaire;
-import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
-import alexandria.modele.bibliotheque.IdentifiantExemplaire;
+import alexandria.modele.exemplaire.Exemplaire;
+import alexandria.modele.exemplaire.ExemplaireAjouté;
+import alexandria.modele.exemplaire.IdentifiantExemplaire;
 import arpinum.command.CommandHandler;
 import arpinum.ddd.BusinessError;
 import arpinum.ddd.event.Event;
@@ -22,7 +22,7 @@ public class AjoutExemplaireCommandeCapteur implements CommandHandler<AjoutExemp
     }
 
     private Tuple2<IdentifiantExemplaire, Seq<Event>> ajoute(Bibliotheque bibliotheque, AjoutExemplaireCommande commande) {
-        Tuple2<ExemplaireAjouteEvenement, Exemplaire> résultat = bibliotheque.ajouteExemplaire(commande.isbn);
+        Tuple2<ExemplaireAjouté, Exemplaire> résultat = bibliotheque.ajouteExemplaire(commande.isbn);
         return résultat
                 .swap()
                 .map(e -> e.identifiant(), e -> (Seq<Event>) Vector.of((Event) e));

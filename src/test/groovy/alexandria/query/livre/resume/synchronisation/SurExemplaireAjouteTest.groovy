@@ -1,7 +1,6 @@
 package alexandria.query.livre.resume.synchronisation
 
-import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement
-import alexandria.modele.lecteur.RegistreLecteurs
+import alexandria.modele.exemplaire.ExemplaireAjouté
 import arpinum.query.WithJongo
 import catalogue.CatalogueLivre
 import catalogue.DetailsLivre
@@ -20,7 +19,7 @@ class SurExemplaireAjouteTest extends Specification {
 
     def "créer un livre s'il n'existe pas"() {
         given:
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
+        def exemplaireAjouteEvenement = new ExemplaireAjouté(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
         catalogueRetourne(new DetailsLivre())
 
         when:
@@ -37,7 +36,7 @@ class SurExemplaireAjouteTest extends Specification {
     def "ajoute un exemplaire à un livre existant"() {
         given:
         jongo.collection("vue_resumelivre") << [_id: "mon isbn", titre: "Harry Potter", nombre: 2]
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
+        def exemplaireAjouteEvenement = new ExemplaireAjouté(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
 
         when:
         capteur().execute(exemplaireAjouteEvenement)
@@ -51,7 +50,7 @@ class SurExemplaireAjouteTest extends Specification {
 
     def "peut récupérer le titre du livre"() {
         given:
-        def exemplaireAjouteEvenement = new ExemplaireAjouteEvenement(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
+        def exemplaireAjouteEvenement = new ExemplaireAjouté(UUID.randomUUID().toString(), "idLecteur", "mon isbn")
         catalogueRetourne(new DetailsLivre(titre: "Harry Potter"))
 
         when:

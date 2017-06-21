@@ -1,6 +1,6 @@
 package alexandria.query.livre.resume.synchronisation;
 
-import alexandria.modele.bibliotheque.ExemplaireAjouteEvenement;
+import alexandria.modele.exemplaire.ExemplaireAjouté;
 import arpinum.ddd.event.EventCaptor;
 import catalogue.CatalogueLivre;
 import catalogue.DetailsLivre;
@@ -8,7 +8,7 @@ import org.jongo.Jongo;
 
 import javax.inject.Inject;
 
-public class SurExemplaireAjoute implements EventCaptor<ExemplaireAjouteEvenement> {
+public class SurExemplaireAjoute implements EventCaptor<ExemplaireAjouté> {
 
     @Inject
     public SurExemplaireAjoute(Jongo jongo, CatalogueLivre catalogue) {
@@ -17,7 +17,7 @@ public class SurExemplaireAjoute implements EventCaptor<ExemplaireAjouteEvenemen
     }
 
     @Override
-    public void execute(ExemplaireAjouteEvenement evenement) {
+    public void execute(ExemplaireAjouté evenement) {
         catalogue.parIsbn(evenement.getIsbn())
                 .map(o -> o.getOrElse(DetailsLivre.LIVRE_VIDE))
                 .onSuccess(d -> jongo.getCollection("vue_resumelivre")

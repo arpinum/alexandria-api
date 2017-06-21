@@ -1,13 +1,11 @@
 package alexandria.command.bibliotheque;
 
-import alexandria.modele.bibliotheque.IdentifiantExemplaire;
+import alexandria.modele.exemplaire.IdentifiantExemplaire;
 import alexandria.modele.lecteur.Lecteur;
 import arpinum.command.Command;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 public class AjoutExemplaireCommande implements Command<IdentifiantExemplaire> {
 

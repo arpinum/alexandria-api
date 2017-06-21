@@ -1,6 +1,6 @@
 package alexandria.saga.bibliiotheque;
 
-import alexandria.modele.bibliotheque.IdentifiantExemplaire;
+import alexandria.modele.exemplaire.IdentifiantExemplaire;
 import arpinum.saga.Saga;
 import org.hibernate.validator.constraints.NotEmpty;
 

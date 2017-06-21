@@ -2,7 +2,7 @@ package alexandria.saga.bibliiotheque
 
 import alexandria.command.bibliotheque.AjoutExemplaireCommande
 import alexandria.command.bibliotheque.CreeBibliothequeParDéfautCommande
-import alexandria.modele.bibliotheque.IdentifiantExemplaire
+import alexandria.modele.exemplaire.IdentifiantExemplaire
 import alexandria.modele.lecteur.Lecteur
 import alexandria.modele.lecteur.RegistreLecteurs
 import arpinum.command.CommandBus

@@ -1,4 +1,4 @@
-package alexandria.modele.bibliotheque;
+package alexandria.modele.exemplaire;
 
 
 public class IdentifiantExemplaire {

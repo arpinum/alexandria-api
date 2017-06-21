@@ -1,13 +1,13 @@
 package alexandria.modele.bibliotheque;
 
+import alexandria.modele.exemplaire.*;
 import alexandria.modele.lecteur.Lecteur;
 import arpinum.ddd.BaseAggregate;
 import arpinum.ddd.event.EventSourceHandler;
 import com.google.common.base.MoreObjects;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
-import io.vavr.collection.List;
-import io.vavr.control.Option;
+import io.vavr.*;
+
+import java.util.UUID;
 
 
 public class Bibliotheque extends BaseAggregate<String> {
@@ -35,27 +35,16 @@ public class Bibliotheque extends BaseAggregate<String> {
         return MoreObjects.toStringHelper(getClass()).add("getId", getId()).toString();
     }
 
-    public Tuple2<ExemplaireAjouteEvenement, Exemplaire> ajouteExemplaire(String isbn) {
-        final Exemplaire exemplaire = new Exemplaire(isbn, this.getId());
-        exemplaires = exemplaires.append(exemplaire);
-        return Tuple.of(nouvelExemplaire(isbn), exemplaire);
+    public Tuple2<ExemplaireAjouté, Exemplaire> ajouteExemplaire(String isbn) {
+        final Exemplaire exemplaire = new Exemplaire(UUID.randomUUID(), isbn, this.getId());
+        return Tuple.of(nouvelExemplaire(exemplaire.getId(), isbn), exemplaire);
     }
 
-    private ExemplaireAjouteEvenement nouvelExemplaire(String isbn) {
-        return new ExemplaireAjouteEvenement(this.getId(), idLecteur, isbn);
-    }
-
-    public boolean contient(Exemplaire exemplaire) {
-        return exemplaires.contains(exemplaire);
-    }
-
-    public Option<Exemplaire> trouve(String isbn) {
-        return exemplaires.find(e -> e.isbn().equals(isbn));
+    private ExemplaireAjouté nouvelExemplaire(UUID id, String isbn) {
+        return new ExemplaireAjouté(id, getId(), idLecteur, isbn);
     }
 
     private String idLecteur;
-
-    private List<Exemplaire> exemplaires = List.empty();
 
     @EventSourceHandler
     public void rejoue(BibliothequeCréée évènement) {

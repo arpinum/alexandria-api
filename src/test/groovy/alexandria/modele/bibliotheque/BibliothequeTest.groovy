@@ -35,41 +35,6 @@ class BibliothequeTest extends Specification {
         bibliotheque.idLecteur() == 'lecteur'
     }
 
-    def "peut contenir un livre"() {
-        given:
-        def uneBibliotheque = uneBibliotheque()
-
-        when:
-        def résultat = uneBibliotheque.ajouteExemplaire("mon isbn")
-
-        then:
-        def exemplaire = résultat._2()
-        exemplaire != null
-        exemplaire.isbn() == "mon isbn"
-        exemplaire.identifiantBibliotheque() == uneBibliotheque.getId()
-        uneBibliotheque.contient(exemplaire)
-        def évènement = résultat._1
-        évènement != null
-        évènement.getTargetId() == uneBibliotheque.id
-        évènement.isbn == "mon isbn"
-    }
-
-    def "peut rechercher un exemplaire"() {
-        given:
-        def bibliotheque = uneBibliotheque()
-        bibliotheque.ajouteExemplaire("isbn")
-        bibliotheque.ajouteExemplaire("autre")
-
-        when:
-        def exemplaireEventuel = bibliotheque.trouve("isbn")
-
-        then:
-        exemplaireEventuel != null
-        exemplaireEventuel.isDefined()
-        exemplaireEventuel.get().isbn == "isbn"
-
-    }
-
     Bibliotheque uneBibliotheque() {
         return new Bibliotheque("getId", new Lecteur(""));
     }

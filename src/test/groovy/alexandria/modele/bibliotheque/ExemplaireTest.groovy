@@ -1,46 +1,49 @@
 package alexandria.modele.bibliotheque
 
+import alexandria.modele.exemplaire.Exemplaire
+import alexandria.modele.exemplaire.ExemplaireAjouté
+import alexandria.modele.lecteur.Lecteur
 import spock.lang.Specification
 
 class ExemplaireTest extends Specification {
 
-    static uuid = UUID.randomUUID().toString()
-    static uuidAutre = UUID.randomUUID().toString()
-
-    def "deux exemplaires avec les mêmes propriétés sont égaux"() {
+    def "est créé depuis une bibliothèque"() {
         given:
-        def unExemplaire = new Exemplaire("toto", this.uuid)
-        def unAutreExemplaire = new Exemplaire("toto", this.uuid)
+        def uneBibliotheque = uneBibliotheque()
 
-        expect:
-        unAutreExemplaire == unExemplaire
+        when:
+        def résultat = uneBibliotheque.ajouteExemplaire("mon isbn")
+
+        then:
+        def exemplaire = résultat._2()
+        exemplaire != null
+        exemplaire.isbn() == "mon isbn"
+        exemplaire.idBibliothèque() == uneBibliotheque.getId()
+        exemplaire.id != null
+
+        def évènement = résultat._1
+        évènement != null
+        évènement.targetId == exemplaire.id
+        évènement.isbn == "mon isbn"
+        évènement.idLecteur == "lecteur"
+        évènement.idBibliothèque == uneBibliotheque.id
     }
 
-    def "deux exemplaires avec le même isbn mais avec des id de biblio différents, sont différents"() {
+    def "rejoue création"() {
         given:
-        def unExemplaire = new Exemplaire("toto", uuid)
-        def unAutreExemplaire = new Exemplaire("toto", uuidAutre)
+        def évènement = new ExemplaireAjouté(UUID.randomUUID(), "bibli", "idLecteur", "isbn")
+        def exemplaire = new Exemplaire()
 
-        expect:
-        unAutreExemplaire != unExemplaire
+        when:
+        exemplaire.rejoue(évènement)
+
+        then:
+        exemplaire.id == évènement.getTargetId()
+        exemplaire.isbn() == 'isbn'
+        exemplaire.idBibliothèque() == "bibli"
     }
 
-
-    def "deux objets différents ont un hashcode différent"() {
-        given:
-        def unExemplaire = new Exemplaire("toto", uuid)
-        def unAutreExemplaire = new Exemplaire("tutu", uuid)
-
-        expect:
-        unAutreExemplaire.hashCode() != unExemplaire.hashCode()
-    }
-
-    def "deux objets différents par leur identifiant biblio ont un hashcode différent"() {
-        given:
-        def unExemplaire = new Exemplaire("tutu", uuid)
-        def unAutreExemplaire = new Exemplaire("tutu", uuidAutre)
-
-        expect:
-        unAutreExemplaire.hashCode() != unExemplaire.hashCode()
+    Bibliotheque uneBibliotheque() {
+        return new Bibliotheque("getId", new Lecteur("lecteur"));
     }
 }
