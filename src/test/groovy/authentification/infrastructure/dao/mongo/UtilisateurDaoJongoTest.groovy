@@ -2,8 +2,6 @@ package authentification.infrastructure.dao.mongo
 
 import arpinum.query.WithJongo
 import authentification.modele.Utilisateur
-import com.mongodb.DBObject
-import io.vavr.control.Option
 import org.junit.Rule
 import spock.lang.Specification
 

@@ -1,21 +1,18 @@
 package alexandria.saga.bibliiotheque;
 
 
-import alexandria.command.bibliotheque.AjoutExemplaireCommande;
-import alexandria.command.bibliotheque.CreeBibliothequeParDéfautCommande;
-import alexandria.modele.exemplaire.IdentifiantExemplaire;
-import alexandria.modele.lecteur.Lecteur;
-import alexandria.modele.lecteur.RegistreLecteurs;
+import alexandria.command.bibliotheque.*;
+import alexandria.modele.lecteur.*;
 import arpinum.command.CommandBus;
 import arpinum.saga.SagaHandler;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
+import io.vavr.*;
 import io.vavr.concurrent.Future;
 
 import javax.inject.Inject;
+import java.util.UUID;
 import java.util.function.Function;
 
-public class AjouteExemplaireBibliothèqueParDéfautSagaCapteur implements SagaHandler<IdentifiantExemplaire, AjouteExemplaireBibliothèqueParDéfautSaga> {
+public class AjouteExemplaireBibliothèqueParDéfautSagaCapteur implements SagaHandler<UUID, AjouteExemplaireBibliothèqueParDéfautSaga> {
 
     @Inject
     public AjouteExemplaireBibliothèqueParDéfautSagaCapteur(RegistreLecteurs registreLecteurs) {
@@ -23,7 +20,7 @@ public class AjouteExemplaireBibliothèqueParDéfautSagaCapteur implements SagaH
     }
 
     @Override
-    public Future<IdentifiantExemplaire> run(CommandBus bus, AjouteExemplaireBibliothèqueParDéfautSaga saga) {
+    public Future<UUID> run(CommandBus bus, AjouteExemplaireBibliothèqueParDéfautSaga saga) {
         return registreLecteurs.trouve(saga.idLecteur)
                 .flatMap(créeOuTrouveBibliothèqueParDéfaut(bus))
                 .flatMap(ajouteExemplaire(bus, saga));
@@ -34,7 +31,7 @@ public class AjouteExemplaireBibliothèqueParDéfautSagaCapteur implements SagaH
                 .map(id -> Tuple.of(id, lecteur));
     }
 
-    private Function<Tuple2<String, Lecteur>, Future<? extends IdentifiantExemplaire>> ajouteExemplaire(CommandBus bus, AjouteExemplaireBibliothèqueParDéfautSaga saga) {
+    private Function<Tuple2<String, Lecteur>, Future<UUID>> ajouteExemplaire(CommandBus bus, AjouteExemplaireBibliothèqueParDéfautSaga saga) {
         return t -> t.apply((id, lecteur) -> bus.send(new AjoutExemplaireCommande(id, saga.isbn, lecteur)));
     }
 

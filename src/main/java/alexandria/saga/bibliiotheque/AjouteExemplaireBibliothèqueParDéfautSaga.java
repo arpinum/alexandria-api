@@ -1,11 +1,12 @@
 package alexandria.saga.bibliiotheque;
 
-import alexandria.modele.exemplaire.IdentifiantExemplaire;
 import arpinum.saga.Saga;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.UUID;
 
-public class AjouteExemplaireBibliothèqueParDéfautSaga implements Saga<IdentifiantExemplaire> {
+
+public class AjouteExemplaireBibliothèqueParDéfautSaga implements Saga<UUID> {
 
     @NotEmpty
     public String idLecteur;

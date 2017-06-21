@@ -1,14 +1,15 @@
 package alexandria.command.bibliotheque;
 
-import alexandria.modele.exemplaire.IdentifiantExemplaire;
 import alexandria.modele.lecteur.Lecteur;
 import arpinum.command.Command;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
-public class AjoutExemplaireCommande implements Command<IdentifiantExemplaire> {
+public class AjoutExemplaireCommande implements Command<UUID> {
 
+    @SuppressWarnings("unused")
     public AjoutExemplaireCommande() {
     }
 

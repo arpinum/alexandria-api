@@ -3,6 +3,7 @@ package alexandria.web.ressource.bibliotheque;
 import alexandria.saga.bibliiotheque.AjouteExemplaireBibliothèqueParDéfautSaga;
 import arpinum.command.CommandBus;
 import arpinum.configuration.Secured;
+import io.vavr.collection.HashMap;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
@@ -33,7 +34,8 @@ public class ExemplairesLecteurRessource {
             , @Context SecurityContext securityContext
             , AjouteExemplaireBibliothèqueParDéfautSaga commande) throws ExecutionException {
         commande.idLecteur = securityContext.getUserPrincipal().getName();
-        bus.send(commande).onSuccess(response::resume)
+        bus.send(commande).map(id-> HashMap.of("id", id))
+                .onSuccess(response::resume)
                 .onFailure(f -> {
                     LoggerFactory.getLogger(ExemplairesLecteurRessource.class).error("Erreur", f);
                     response.resume(f);

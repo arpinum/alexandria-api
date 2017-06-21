@@ -7,10 +7,10 @@ public class FicheLecteur {
     public FicheLecteur() {
     }
 
-    public FicheLecteur(String id, String nom, String prénom) {
+    public FicheLecteur(String id, String nom, String prenom) {
         this.id = id;
         this.nom = nom;
-        this.prénom = prénom;
+        this.prenom = prenom;
     }
 
     public String getId() {
@@ -21,11 +21,11 @@ public class FicheLecteur {
         return nom;
     }
 
-    public String getPrénom() {
-        return prénom;
+    public String getPrenom() {
+        return prenom;
     }
 
     private String id;
     private String nom;
-    private String prénom;
+    private String prenom;
 }
