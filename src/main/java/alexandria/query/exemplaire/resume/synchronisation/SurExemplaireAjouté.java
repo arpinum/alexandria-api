@@ -22,7 +22,7 @@ public class SurExemplaireAjouté implements EventCaptor<ExemplaireAjouté> {
                     jongo.getCollection("vue_resume_exemplaires")
                             .update("{_id:#}", évènement.getTargetId())
                             .upsert()
-                            .with("{$set:{disponible: true, lecteur:#, idBibliothque:#, isbn:#}}", ficheLecteur, évènement.getIdBibliothèque(), évènement.getIsbn());
+                            .with("{$set:{disponible: true, lecteur:#, idBibliotheque:#, isbn:#}}", ficheLecteur, évènement.getIdBibliothèque(), évènement.getIsbn());
                 });
 
     }

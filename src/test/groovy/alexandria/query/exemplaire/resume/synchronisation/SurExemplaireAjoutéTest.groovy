@@ -37,7 +37,7 @@ class SurExemplaireAjoutéTest extends Specification {
         record.lecteur.id == lecteur.id
         record.lecteur.nom == lecteur.nom
         record.lecteur.prenom == lecteur.prenom
-        record.idBibliothque == 'bibli'
+        record.idBibliotheque == 'bibli'
         record.isbn == 'isbn'
         record.disponible == true
     }
