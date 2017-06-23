@@ -15,4 +15,6 @@ public class RésuméExemplaire {
     public String isbn;
 
     public FicheLecteur lecteur;
+
+    public boolean disponible;
 }
