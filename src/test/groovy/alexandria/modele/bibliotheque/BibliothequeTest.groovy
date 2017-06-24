@@ -1,5 +1,6 @@
 package alexandria.modele.bibliotheque
 
+import alexandria.modele.exemplaire.Exemplaire
 import alexandria.modele.lecteur.Lecteur
 import spock.lang.Specification
 
@@ -33,6 +34,60 @@ class BibliothequeTest extends Specification {
         then:
         bibliotheque.id == 'getId'
         bibliotheque.idLecteur() == 'lecteur'
+    }
+
+    def "peut sortir un exemplaire"() {
+        given:
+        def bibliotheque = uneBibliotheque()
+        def exemplaire = new Exemplaire(UUID.randomUUID(), "isbn", bibliotheque.id)
+        def lecteur = new Lecteur('id')
+
+        when:
+        def résultat = bibliotheque.sort(exemplaire, lecteur)
+
+        then:
+        résultat != null
+        def emprunt = résultat._2
+        emprunt.idBibliothèque == bibliotheque.id
+        emprunt.idLecteur == lecteur.id
+        emprunt.idExemplaire == exemplaire.id
+        def évènement = résultat._1
+        évènement.targetId == bibliotheque.id
+        évènement.idLecteur == lecteur.id
+        évènement.idExemplaire == exemplaire.id
+    }
+
+    def "ne peut pas sortir le même exemplaire deux fois"() {
+        given:
+        def bibliotheque = uneBibliotheque()
+        def exemplaire = new Exemplaire(UUID.randomUUID(), "isbn", bibliotheque.id)
+        def lecteur = new Lecteur('id')
+        bibliotheque.sort(exemplaire, lecteur)
+
+        when:
+        bibliotheque.sort(exemplaire, lecteur)
+
+        then:
+        thrown(ExemplaireDéjàSorti)
+    }
+
+    def "rejoue la sortie"() {
+        given:
+        def bibliotheque = uneBibliotheque()
+        def idExemplaire = UUID.randomUUID()
+        def évènement = new ExemplaireEmprunté(bibliotheque.id, idExemplaire, 'lecteur')
+
+        when:
+        bibliotheque.rejoue(évènement)
+
+        then:
+        def empruntEventuel = bibliotheque.emprunts.get(idExemplaire)
+        empruntEventuel.isDefined()
+        with(empruntEventuel.get()) {
+            idBibliothèque == bibliotheque.id
+            idLecteur == 'lecteur'
+            idExemplaire == idExemplaire
+        }
     }
 
     Bibliotheque uneBibliotheque() {

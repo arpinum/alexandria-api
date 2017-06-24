@@ -6,6 +6,7 @@ import arpinum.ddd.BaseAggregate;
 import arpinum.ddd.event.EventSourceHandler;
 import com.google.common.base.MoreObjects;
 import io.vavr.*;
+import io.vavr.collection.HashMap;
 
 import java.util.UUID;
 
@@ -44,13 +45,30 @@ public class Bibliotheque extends BaseAggregate<String> {
         return new ExemplaireAjouté(id, getId(), idLecteur, isbn);
     }
 
-    private String idLecteur;
+    public Tuple2<ExemplaireEmprunté, Emprunt> sort(Exemplaire exemplaire, Lecteur lecteur) {
+        emprunts.get(exemplaire.getId()).peek(e -> {
+            throw new ExemplaireDéjàSorti();
+        });
+        Emprunt emprunt = new Emprunt(getId(), exemplaire.getId(), lecteur.getId());
+        emprunts = emprunts.put(exemplaire.getId(), emprunt);
+        return Tuple.of(new ExemplaireEmprunté(getId(), exemplaire.getId(), lecteur.getId())
+                , emprunt);
+    }
 
     @EventSourceHandler
     public void rejoue(BibliothequeCréée évènement) {
         setId(évènement.getTargetId().toString());
         idLecteur = évènement.idLecteur();
     }
+
+    @EventSourceHandler
+    public void rejoue(ExemplaireEmprunté évènement) {
+        emprunts = emprunts.put(évènement.getIdExemplaire()
+                , new Emprunt((String) évènement.getTargetId(), évènement.getIdExemplaire(), évènement.getIdLecteur()));
+    }
+
+    private String idLecteur;
+    private HashMap<UUID, Emprunt> emprunts = HashMap.empty();
 
     public static class Fabrique {
 
