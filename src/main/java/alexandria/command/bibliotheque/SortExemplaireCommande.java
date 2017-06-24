@@ -23,6 +23,6 @@ public class SortExemplaireCommande implements Command<Emprunt>{
     @NotNull
     public final Lecteur lecteur;
 
-    @NotEmpty
+    @NotNull
     public final UUID idExemplaire;
 }

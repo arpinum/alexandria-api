@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class Exemplaire extends BaseAggregateWithUuid{
 
-    protected Exemplaire() {
+    public Exemplaire() {
     }
 
     public Exemplaire(UUID id, String isbn, String idBibliothèque) {
@@ -22,10 +22,6 @@ public class Exemplaire extends BaseAggregateWithUuid{
 
     public String idBibliothèque() {
         return idBibliothèque;
-    }
-
-    public IdentifiantExemplaire identifiant() {
-        return new IdentifiantExemplaire(idBibliothèque, isbn);
     }
 
     @EventSourceHandler
