@@ -17,7 +17,7 @@ public class AjoutExemplaireCommandeCapteur implements CommandHandler<AjoutExemp
     public Tuple2<UUID, Seq<Event>> execute(AjoutExemplaireCommande commande) {
         return LocalisateurEntrepots.bibliotheques().get(commande.idBibliotheque)
                 .map(bibliotheque -> ajoute(bibliotheque, commande))
-                .getOrElseThrow(() -> new BusinessError("BIBLIOTHEQUE_INCONNUCE"));
+                .getOrElseThrow(() -> new BusinessError("BIBLIOTHEQUE_INCONNUE"));
     }
 
     private Tuple2<UUID, Seq<Event>> ajoute(Bibliotheque bibliotheque, AjoutExemplaireCommande commande) {

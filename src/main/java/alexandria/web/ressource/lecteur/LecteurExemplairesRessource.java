@@ -1,4 +1,4 @@
-package alexandria.web.ressource.bibliotheque;
+package alexandria.web.ressource.lecteur;
 
 import alexandria.saga.bibliiotheque.AjouteExemplaireBibliothèqueParDéfautSaga;
 import arpinum.command.CommandBus;
@@ -18,12 +18,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import java.util.concurrent.ExecutionException;
 
-@Path("/ma/bibliotheque/exemplaires")
+@Path("/lecteur/exemplaires")
 @Secured
-public class ExemplairesLecteurRessource {
+public class LecteurExemplairesRessource {
 
     @Inject
-    public ExemplairesLecteurRessource(CommandBus bus) {
+    public LecteurExemplairesRessource(CommandBus bus) {
         this.bus = bus;
     }
 
@@ -37,7 +37,7 @@ public class ExemplairesLecteurRessource {
         bus.send(commande).map(id-> HashMap.of("id", id))
                 .onSuccess(response::resume)
                 .onFailure(f -> {
-                    LoggerFactory.getLogger(ExemplairesLecteurRessource.class).error("Erreur", f);
+                    LoggerFactory.getLogger(LecteurExemplairesRessource.class).error("Erreur", f);
                     response.resume(f);
                 });
     }
