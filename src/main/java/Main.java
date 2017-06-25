@@ -23,6 +23,9 @@ public class Main {
         server.deploy(new AlexandriaApplication(parentInjector, authentificationApplication));
         Undertow.Builder serverConfiguration = Undertow.builder()
                 .addHttpListener(8080, "localhost");
+
+        Grapher.graph(parentInjector, "parent");
+
         server.start(serverConfiguration);
     }
 

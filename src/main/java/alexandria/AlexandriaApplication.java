@@ -1,6 +1,7 @@
 package alexandria;
 
 import alexandria.configuration.AlexandriaConfiguration;
+import arpinum.configuration.Grapher;
 import arpinum.configuration.JacksonConfiguration;
 import arpinum.infrastructure.security.JwtFilter;
 import arpinum.infrastructure.bus.guice.ScanMagique;
@@ -19,6 +20,7 @@ public class AlexandriaApplication extends Application {
 
     public AlexandriaApplication(Injector parentInjector, AuthentificationApplication authentificationApplication) {
         injector = parentInjector.createChildInjector(new AlexandriaConfiguration(authentificationApplication));
+        Grapher.graph(injector, "alexandria");
     }
 
     @Override
