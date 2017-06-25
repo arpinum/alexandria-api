@@ -18,18 +18,17 @@ class LecteurEmpruntRessourceTest extends Specification {
 
     def "demande à rendre un exemplaire"() {
         given:
-        def commande = new RendExemplaireCommande(idBibliotheque: 'id')
         def response = Mock(AsyncResponse)
         def idExemplaire = UUID.randomUUID()
 
         when:
-        ressource.rend(response, idExemplaire, commande)
+        ressource.rend(response, idExemplaire, 'id')
 
         then:
         1 * bus.send({commandeEnvoyé ->
-            commandeEnvoyé == commande
+            commandeEnvoyé.idBibliotheque == 'id'
             commandeEnvoyé.idExemplaire == idExemplaire
-        }) >> Future.successful(MoreExecutors.newDirectExecutorService(), Nothing.INSTANCE)
+        } as RendExemplaireCommande) >> Future.successful(MoreExecutors.newDirectExecutorService(), Nothing.INSTANCE)
         1 * response.resume(HashMap.of("status", "ok"))
     }
 }

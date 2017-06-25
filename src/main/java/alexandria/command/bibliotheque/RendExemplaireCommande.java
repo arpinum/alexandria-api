@@ -8,6 +8,11 @@ import java.util.UUID;
 
 public class RendExemplaireCommande implements VoidCommand {
 
+    public RendExemplaireCommande(String idBibliotheque, UUID idExemplaire) {
+        this.idBibliotheque = idBibliotheque;
+        this.idExemplaire = idExemplaire;
+    }
+
     @NotEmpty
     public String idBibliotheque;
 

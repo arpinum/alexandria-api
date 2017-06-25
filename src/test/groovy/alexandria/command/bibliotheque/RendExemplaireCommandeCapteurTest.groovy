@@ -23,7 +23,7 @@ class RendExemplaireCommandeCapteurTest extends Specification {
         bibliotheque.sort(exemplaire, new Lecteur(''))
 
         when:
-        def évènements = capteur.doExecute(new RendExemplaireCommande(idBibliotheque: 'id', idExemplaire: exemplaire.id))
+        def évènements = capteur.doExecute(new RendExemplaireCommande('id', exemplaire.id))
 
         then:
         with(évènements.first()) {

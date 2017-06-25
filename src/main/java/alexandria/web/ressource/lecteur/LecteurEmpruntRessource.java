@@ -10,7 +10,7 @@ import javax.ws.rs.container.*;
 import javax.ws.rs.core.MediaType;
 import java.util.UUID;
 
-@Path("/lecteur/emprunts/{exemplaire}")
+@Path("/lecteur/emprunts/{bibliotheque}:{exemplaire}")
 public class LecteurEmpruntRessource {
 
     @Inject
@@ -19,10 +19,9 @@ public class LecteurEmpruntRessource {
     }
 
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void rend(@Suspended AsyncResponse response, @PathParam("exemplaire") UUID idExemplaire, RendExemplaireCommande commande) {
-        commande.idExemplaire = idExemplaire;
+    public void rend(@Suspended AsyncResponse response, @PathParam("exemplaire") UUID idExemplaire, @PathParam("bibliotheque") String bibliotheque) {
+        RendExemplaireCommande commande = new RendExemplaireCommande(bibliotheque, idExemplaire);
         bus.send(commande)
                 .map(r -> HashMap.of("status", "ok"))
                 .onSuccess(response::resume)
