@@ -59,8 +59,7 @@ class BibliothequeTest extends Specification {
 
     def "ne peut pas sortir le même exemplaire deux fois"() {
         given:
-        def bibliotheque = uneBibliotheque()
-        def exemplaire = new Exemplaire(UUID.randomUUID(), "isbn", bibliotheque.id)
+        def (bibliotheque, exemplaire) = uneBibliothequeAvecExemplaire()
         def lecteur = new Lecteur('id')
         bibliotheque.sort(exemplaire, lecteur)
 
@@ -90,7 +89,53 @@ class BibliothequeTest extends Specification {
         }
     }
 
+    def "peut rendre un exemplaire"() {
+        given:
+        def (bibliotheque, exemplaire) = uneBibliothequeAvecExemplaire()
+        bibliotheque.sort(exemplaire, new Lecteur('id'))
+
+        when:
+        def résultat = bibliotheque.rend(exemplaire)
+
+        then:
+        résultat !=null
+        résultat.targetId == bibliotheque.id
+        résultat.idExemplaire == exemplaire.id
+    }
+
+    def "ne peut pas rendre le même exemplaire deux fois"() {
+        given:
+        def (bibliothèque, exemplaire) = uneBibliothequeAvecExemplaire()
+        bibliothèque.sort(exemplaire, new Lecteur(''));
+        bibliothèque.rend(exemplaire)
+
+        when:
+        bibliothèque.rend(exemplaire)
+
+        then:
+        thrown(ExemplaireDéjàRendu)
+    }
+
+    def "rejoue l'évènement de retour"() {
+        given:
+        def bibliotheque = uneBibliotheque()
+        def exemplaire = UUID.randomUUID()
+        bibliotheque.rejoue(new ExemplaireEmprunté('id', exemplaire, ''))
+
+        when:
+        bibliotheque.rejoue(new ExemplaireRendu(bibliotheque.id, exemplaire))
+
+        then:
+        bibliotheque.emprunts.isEmpty()
+    }
+
     Bibliotheque uneBibliotheque() {
         return new Bibliotheque("getId", new Lecteur(""));
+    }
+
+    def uneBibliothequeAvecExemplaire(isbn = 'isbn') {
+        def bibliotheque = uneBibliotheque()
+        def exemplaire = bibliotheque.ajouteExemplaire(isbn)._2
+        return [bibliotheque, exemplaire]
     }
 }
