@@ -1,6 +1,5 @@
 package alexandria.modele.bibliotheque
 
-import alexandria.modele.exemplaire.Exemplaire
 import alexandria.modele.lecteur.Lecteur
 import spock.lang.Specification
 
@@ -38,8 +37,7 @@ class BibliothequeTest extends Specification {
 
     def "peut sortir un exemplaire"() {
         given:
-        def bibliotheque = uneBibliotheque()
-        def exemplaire = new Exemplaire(UUID.randomUUID(), "isbn", bibliotheque.id)
+        def (bibliotheque, exemplaire) = uneBibliothequeAvecEmplaire()
         def lecteur = new Lecteur('id')
 
         when:
@@ -59,8 +57,7 @@ class BibliothequeTest extends Specification {
 
     def "ne peut pas sortir le même exemplaire deux fois"() {
         given:
-        def bibliotheque = uneBibliotheque()
-        def exemplaire = new Exemplaire(UUID.randomUUID(), "isbn", bibliotheque.id)
+        def (bibliotheque, exemplaire) = uneBibliothequeAvecEmplaire()
         def lecteur = new Lecteur('id')
         bibliotheque.sort(exemplaire, lecteur)
 
@@ -92,5 +89,11 @@ class BibliothequeTest extends Specification {
 
     Bibliotheque uneBibliotheque() {
         return new Bibliotheque("getId", new Lecteur(""));
+    }
+
+    def uneBibliothequeAvecEmplaire() {
+        def bibliotheque = uneBibliotheque()
+        def exemplaire = bibliotheque.ajouteExemplaire('isbn')._2
+        return [bibliotheque, exemplaire]
     }
 }
