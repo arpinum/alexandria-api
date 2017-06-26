@@ -55,6 +55,12 @@ public class Bibliotheque extends BaseAggregate<String> {
                 , emprunt);
     }
 
+    public ExemplaireRendu rend(Exemplaire exemplaire) {
+        ExemplaireRendu évènement = new ExemplaireRendu(getId(), exemplaire.getId());
+        rejoue(évènement);
+        return évènement;
+    }
+
     @EventSourceHandler
     public void rejoue(BibliothequeCréée évènement) {
         setId(évènement.getTargetId().toString());
@@ -65,6 +71,11 @@ public class Bibliotheque extends BaseAggregate<String> {
     public void rejoue(ExemplaireEmprunté évènement) {
         emprunts = emprunts.put(évènement.getIdExemplaire()
                 , new Emprunt((String) évènement.getTargetId(), évènement.getIdExemplaire(), évènement.getIdLecteur()));
+    }
+
+    @EventSourceHandler
+    public void rejoue(ExemplaireRendu évènement) {
+        emprunts = emprunts.remove(évènement.getIdExemplaire());
     }
 
     private String idLecteur;

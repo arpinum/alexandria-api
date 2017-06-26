@@ -87,6 +87,34 @@ class BibliothequeTest extends Specification {
         }
     }
 
+    def "peut rendre un exemplaire"() {
+        given:
+        def (bibliothèque, exemplaire) = uneBibliothequeAvecEmplaire()
+        bibliothèque.sort(exemplaire, new Lecteur(''))
+
+        when:
+        def évènement = bibliothèque.rend(exemplaire)
+
+        then:
+        bibliothèque.emprunts.isEmpty()
+        with(évènement) {
+            targetId == bibliothèque.id
+            idExemplaire == exemplaire.id
+        }
+    }
+
+    def "peut rejouer un retour"() {
+        given:
+        def (bibliothèque, exemplaire) = uneBibliothequeAvecEmplaire()
+        bibliothèque.sort(exemplaire, new Lecteur(''))
+
+        when:
+        bibliothèque.rejoue(new ExemplaireRendu(bibliothèque.id, exemplaire.id))
+
+        then:
+        bibliothèque.emprunts.isEmpty()
+    }
+
     Bibliotheque uneBibliotheque() {
         return new Bibliotheque("getId", new Lecteur(""));
     }
