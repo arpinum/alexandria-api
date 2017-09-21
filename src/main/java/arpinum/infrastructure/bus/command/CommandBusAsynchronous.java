@@ -24,8 +24,11 @@ public class CommandBusAsynchronous implements CommandBus {
     @Inject
     public CommandBusAsynchronous(Set<CommandMiddleware> middlewares, Set<CommandHandler> handlers, @Computation ExecutorService executor) {
         middlewareChain = List.ofAll(middlewares)
-                .append(new InvokeCommandHandlerMiddleware(handlers, executor))
-                .foldRight(new EmptyChain(), Chain::new);
+                .foldRight(finalChain(handlers, executor), Chain::new);
+    }
+
+    private Chain finalChain(Set<CommandHandler> handlers, @Computation ExecutorService executor) {
+        return new Chain(new InvokeCommandHandlerMiddleware(handlers, executor), null);
     }
 
     @Override
@@ -55,16 +58,4 @@ public class CommandBusAsynchronous implements CommandBus {
         private Chain next;
     }
 
-    private class EmptyChain extends Chain {
-        public EmptyChain() {
-            super(null, null);
-        }
-
-        @Override
-        public <T> Future<Tuple2<T, Seq<Event>>> apply(Command<T> command) {
-            throw new RuntimeException("Can't happen");
-        }
-    }
 }
-
-
