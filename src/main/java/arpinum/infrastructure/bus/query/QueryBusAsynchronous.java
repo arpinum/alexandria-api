@@ -21,24 +21,15 @@ public class QueryBusAsynchronous implements QueryBus {
     @Inject
     public QueryBusAsynchronous(Set<QueryMiddleware> middlewares, Set<QueryHandler> handlers, @Io ExecutorService executor) {
         this.executor = executor;
-        this.handlers = List.ofAll(handlers);
-        middlewareChain = List.ofAll(middlewares).foldRight(new HandlerInvokation(), Chain::new);
+        middlewareChain = List.ofAll(middlewares)
+                .foldRight(new HandlerInvokation(List.ofAll(handlers)), Chain::new);
     }
 
     @Override
     public <TResponse> Future<TResponse> send(Query<TResponse> query) {
-        return handlers.find(h -> h.queryType().equals(query.getClass()))
-                .map(h -> (QueryHandler<Query<TResponse>, TResponse>) h)
-                .map(h -> execute(h, query))
-                .getOrElse(() -> Future.failed(new CaptorNotFound(query.getClass())));
+        return Future.of(executor, ()->middlewareChain.apply(query));
     }
 
-    private <TReponse> Future<TReponse> execute(QueryHandler<Query<TReponse>, TReponse> handler, Query<TReponse> command) {
-        return Future.of(executor, () -> middlewareChain
-                .apply(handler, command));
-    }
-
-    private final List<QueryHandler> handlers;
     private final Chain middlewareChain;
     private final ExecutorService executor;
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryBusAsynchronous.class);
@@ -50,9 +41,9 @@ public class QueryBusAsynchronous implements QueryBus {
             this.next = next;
         }
 
-        public <T> T apply(QueryHandler<Query<T>, T> h, Query<T> command) {
+        public <T> T apply(Query<T> command) {
             LOGGER.debug("Running middleware {}", current.getClass());
-            return current.intercept(command, () -> next.apply(h, command));
+            return current.intercept(command, () -> next.apply(command));
         }
 
         private QueryMiddleware current;
@@ -60,14 +51,24 @@ public class QueryBusAsynchronous implements QueryBus {
     }
 
     private static class HandlerInvokation extends Chain {
-        public HandlerInvokation() {
+
+        public HandlerInvokation(List<QueryHandler> handlers) {
             super(null, null);
+            this.handlers = handlers;
         }
 
         @Override
-        public <T> T apply(QueryHandler<Query<T>, T> h, Query<T> command) {
-            LOGGER.debug("Applying handler {}", h.getClass());
-            return h.execute(command);
+        public <T> T apply(Query<T> command) {
+            return handlers.filter(h->h.queryType().equals(command.getClass()))
+                    .map(h -> {
+                        LOGGER.debug("Applying handler {}", h.getClass());
+                        return h.execute(command);
+                    })
+                    .map(o -> (T) o)
+                    .peekOption()
+                    .getOrElseThrow(()->new CaptorNotFound(command.getClass()));
         }
+
+        private List<QueryHandler> handlers;
     }
 }

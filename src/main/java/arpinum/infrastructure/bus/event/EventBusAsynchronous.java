@@ -1,19 +1,10 @@
 package arpinum.infrastructure.bus.event;
 
-import arpinum.ddd.event.Event;
-import arpinum.ddd.event.EventBus;
-import arpinum.ddd.event.EventBusMiddleware;
-import arpinum.ddd.event.EventCaptor;
-import arpinum.infrastructure.bus.Computation;
+import arpinum.ddd.event.*;
 import arpinum.infrastructure.bus.Io;
-import arpinum.infrastructure.bus.command.CommandBusAsynchronous;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
-import io.vavr.collection.List;
-import io.vavr.collection.Seq;
+import io.vavr.collection.*;
 import io.vavr.concurrent.Future;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -25,23 +16,21 @@ public class EventBusAsynchronous implements EventBus {
     @Inject
     public EventBusAsynchronous(Set<EventBusMiddleware> middlewares, Set<EventCaptor> captors, @Io ExecutorService executorService) {
         this.executorService = executorService;
-        this.captors = List.ofAll(captors);
-        middlewareChain = List.ofAll(middlewares).foldRight(new CaptorInvokation(), Chain::new);
+        middlewareChain = List.ofAll(middlewares)
+                .foldRight(new CaptorInvokation(List.ofAll(captors)), Chain::new);
     }
 
 
     @Override
     public void publish(Seq<Event> events) {
-        events.map(e -> Tuple.of(e, captors.filter(c -> c.eventType().equals(e.getClass()))))
-                .map(t -> t.apply((e, c) -> c.map(h -> execute(e, h))));
+        events.map(this::execute);
     }
 
-    private Future<Boolean> execute(Event<?> event, EventCaptor<Event<?>> captor) {
-        return Future.of(executorService, () -> middlewareChain.apply(captor, event));
+    private Future<Boolean> execute(Event<?> event) {
+        return Future.of(executorService, () -> middlewareChain.apply(event));
     }
 
     private ExecutorService executorService;
-    private final List<EventCaptor> captors;
     private final Chain middlewareChain;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EventBusAsynchronous.class);
@@ -53,9 +42,9 @@ public class EventBusAsynchronous implements EventBus {
             this.next = next;
         }
 
-        public boolean apply(EventCaptor<Event<?>> h, Event<?> event) {
+        public boolean apply(Event<?> event) {
             LOGGER.debug("Running middleware {}", current.getClass());
-            current.intercept(event, () -> next.apply(h, event));
+            current.intercept(event, () -> next.apply(event));
             return true;
         }
 
@@ -66,16 +55,22 @@ public class EventBusAsynchronous implements EventBus {
 
     private static class CaptorInvokation extends Chain {
 
-        public CaptorInvokation() {
+        public <T> CaptorInvokation(List<EventCaptor> captors) {
             super(null, null);
+            this.captors = captors;
         }
 
         @Override
-        public boolean apply(EventCaptor<Event<?>> h, Event<?> event) {
-            LOGGER.debug("Applying captor {}", h.getClass());
-            h.execute(event);
-            return true;
+        public boolean apply(Event<?> event) {
+            return captors.filter(c -> c.eventType().equals(event.getClass()))
+                    .map(h -> {
+                        LOGGER.debug("Applying captor {}", h.getClass());
+                        h.execute(event);
+                        return true;
+                    })
+                    .reduce((a, b) -> a && b);
         }
 
+        private List<EventCaptor> captors;
     }
 }
